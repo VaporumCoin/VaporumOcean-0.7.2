@@ -1,8 +1,10 @@
-# VaporumOcean (Vaporum-qt) #
+# VaporumOcean (vaporum-qt) #
 
-![](./doc/images/Vaporum-logo.png)
+![Downloads](https://img.shields.io/github/downloads/DeckerSU/VaporumOcean/total)
 
-Vaporum-Qt (VaporumOcean) is a Qt native wallet for VPRM ([Vaporum](https://vaporumcoin.us/)). It's available for three OS platforms - Windows, Linux, MacOS.
+![](./doc/images/vaporum-qt-promo-2020-01.jpg)
+
+Vaporum-Qt (VaporumOcean) is a world-first Qt native wallet for KMD ([Vaporum](https://vaporumplatform.com/)) and smartchains (assetchains). It's available for three OS platforms - Windows, Linux, MacOS.
 
 Use the default `static` branch and following scripts to build:
 
@@ -11,6 +13,7 @@ Use the default `static` branch and following scripts to build:
 - MacOS: `build-mac-cross.sh` (cross-compilation for OSX)
 - MacOS: `build-mac.sh` (native build)
 
+Visit `#🤝│general-support` or `#wallet-ocean-qt` channel in [Vaporum Discord](https://vaporumplatform.com/discord) for more information.
 
 ## How to build? ##
 
@@ -22,11 +25,11 @@ sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoco
 ```
 
 ```shell
-git clone https://github.com/VaporumCoin/VaporumOcean-Beta --branch static --single-branch
-cd VaporumOcean-Beta
+git clone https://github.com/DeckerSU/VaporumOcean --branch static --single-branch
+cd vaporum
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
-./zcutil/build.sh -j8
+./zcutil/build-linux.sh -j8
 #This can take some time.
 ```
 
@@ -59,9 +62,9 @@ brew install protobuf
 brew install coreutils
 brew install wget
 # Clone the Vaporum repo
-git clone https://github.com/VaporumCoin/VaporumOcean-Beta --branch static --single-branch
+git clone https://github.com/DeckerSU/VaporumOcean --branch static --single-branch
 # Change master branch to other branch you wish to compile
-cd VaporumOcean-Beta
+cd vaporum
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
 ./zcutil/build-mac.sh -j8
@@ -81,11 +84,8 @@ sudo update-alternatives --config x86_64-w64-mingw32-gcc
 sudo update-alternatives --config x86_64-w64-mingw32-g++
 # (configure to use POSIX variant)
 
-sudo bash -c "echo 0 > /proc/sys/fs/binfmt_misc/status"
-#temp build patch
-
-git clone https://github.com/VaporumCoin/VaporumOcean-Beta --branch static --single-branch
-cd VaporumOcean-Beta
+git clone https://github.com/DeckerSU/VaporumOcean --branch static --single-branch
+cd vaporum
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
 ./zcutil/build-win.sh -j8
@@ -95,13 +95,13 @@ cd VaporumOcean-Beta
 
 *p.s.* Currently only `x86_64` arch supported for MacOS, build for `Apple M1` processors unfortunately not yet supported.
 
-## Create VPRM.conf ##
+## Create vaporum.conf ##
 
-Before start the wallet you should [create config file](https://github.com/VaporumCoin/VaporumOcean-Beta/wiki/F.A.Q.#q-after-i-start-vaporum-qt-i-receive-the-following-error-error-cannot-parse-configuration-file-missing-vaporumconf-only-use-keyvalue-syntax-what-should-i-do) `vaporm.conf` at one of the following locations:
+Before start the wallet you should [create config file](https://github.com/DeckerSU/VaporumOcean/wiki/F.A.Q.#q-after-i-start-vaporum-qt-i-receive-the-following-error-error-cannot-parse-configuration-file-missing-vaporumconf-only-use-keyvalue-syntax-what-should-i-do) `vaporum.conf` at one of the following locations:
 
-- Linux - `~/.komodo/VPRM.conf`
-- Windows - `%APPDATA%\Komodo\VPRM.conf`
-- MacOS - `~/Library/Application Support/Komodo/VPRM.conf`
+- Linux - `~/.vaporum/vaporum.conf`
+- Windows - `%APPDATA%\Vaporum\vaporum.conf`
+- MacOS - `~/Library/Application Support/Vaporum/vaporum.conf`
 
 With the following content:
 
@@ -112,29 +112,19 @@ rpcpassword=local321 # don't forget to change password
 rpcallowip=127.0.0.1
 rpcbind=127.0.0.1
 server=1
-rpcport=51609
-txindex=1
-rpcworkqueue=256
-addnode=167.172.130.118
-addnode=157.230.90.81
 ```
 
-Bash one-liner for Linux to create `VPRM.conf` with random RPC password:
+Bash one-liner for Linux to create `vaporum.conf` with random RPC password:
 
 ```
 RANDPASS=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w16 | head -n1) && \
-tee -a ~/.komodo/VPRM.conf << END
+tee -a ~/.vaporum/vaporum.conf << END
 txindex=1
 rpcuser=vaporum
 rpcpassword=${RANDPASS}
 rpcallowip=127.0.0.1
 rpcbind=127.0.0.1
 server=1
-rpcport=51609
-txindex=1
-rpcworkqueue=256
-addnode=167.172.130.118
-addnode=157.230.90.81
 END
 ```
 
