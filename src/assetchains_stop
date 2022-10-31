@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eo pipefail
+vaporum_cli='./vaporum-cli'
+
+./listassetchains | while read chain; do
+  $vaporum_cli --ac_name=$chain stop
+done

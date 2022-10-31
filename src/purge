@@ -1,0 +1,5 @@
+rm -rf ~/.vaporum/$1/chainstate
+rm -rf ~/.vaporum/$1/database
+rm -rf ~/.vaporum/$1/blocks
+rm -rf ~/.vaporum/$1/vaporumstate
+
