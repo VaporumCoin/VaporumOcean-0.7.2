@@ -38,7 +38,7 @@
   <true/>
 
   <key>CFBundleIdentifier</key>
-  <string>org.vaporumplatform.Vaporum-Qt</string>
+  <string>org.komodoplatform.Vaporum-Qt</string>
 
   <key>CFBundleURLTypes</key>
   <array>
@@ -46,7 +46,7 @@
       <key>CFBundleTypeRole</key>
       <string>Editor</string>
       <key>CFBundleURLName</key>
-      <string>org.vaporumplatform.VaporumPayment</string>
+      <string>org.komodoplatform.VaporumPayment</string>
       <key>CFBundleURLSchemes</key>
       <array>
         <string>vaporum</string>
