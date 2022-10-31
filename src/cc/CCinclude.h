@@ -51,7 +51,7 @@ Details.
 /// This is a key performance boosting thing as if it wasnt there, trying to get all the utxo for an address not in the wallet is quite time consuming.
 ///
 /// More information about Antara framework:
-/// https://developers.vaporumplatform.com/basic-docs/start-here/about-vaporum-platform/product-introductions.html#smart-chains-antara
+/// https://developers.komodoplatform.com/basic-docs/start-here/about-vaporum-platform/product-introductions.html#smart-chains-antara
 
 #include <cc/eval.h>
 #include <script/cc.h>

@@ -4,7 +4,7 @@
 
 ![](./doc/images/vaporum-qt-promo-2020-01.jpg)
 
-Vaporum-Qt (VaporumOcean) is a world-first Qt native wallet for KMD ([Vaporum](https://vaporumplatform.com/)) and smartchains (assetchains). It's available for three OS platforms - Windows, Linux, MacOS.
+Vaporum-Qt (VaporumOcean) is a world-first Qt native wallet for KMD ([Vaporum](https://komodoplatform.com/)) and smartchains (assetchains). It's available for three OS platforms - Windows, Linux, MacOS.
 
 Use the default `static` branch and following scripts to build:
 
@@ -13,7 +13,7 @@ Use the default `static` branch and following scripts to build:
 - MacOS: `build-mac-cross.sh` (cross-compilation for OSX)
 - MacOS: `build-mac.sh` (native build)
 
-Visit `#🤝│general-support` or `#wallet-ocean-qt` channel in [Vaporum Discord](https://vaporumplatform.com/discord) for more information.
+Visit `#🤝│general-support` or `#wallet-ocean-qt` channel in [Vaporum Discord](https://komodoplatform.com/discord) for more information.
 
 ## How to build? ##
 
