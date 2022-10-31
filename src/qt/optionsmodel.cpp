@@ -76,12 +76,12 @@ void OptionsModel::Init(bool resetSettings)
         settings.setValue("nDisplayUnit", VaporumUnits::KMD);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
 
-    std::string defaultStrThirdPartyTxUrls = "https://kmdexplorer.io/tx/%s|https://kmd.explorer.dexstats.info/tx/%s";
+    std::string defaultStrThirdPartyTxUrls = "http://explorer2.vaporumcoin.us/tx/%s|http://explorer.vaporumcoin.us/tx/%s";
     std::string strAssetchainName = std::string(chainName.symbol().c_str());
     std::transform(strAssetchainName.begin(), strAssetchainName.end(), strAssetchainName.begin(), [](unsigned char c){ return std::tolower(c); });
 
     if (!strAssetchainName.empty()) {
-        defaultStrThirdPartyTxUrls = "https://" + strAssetchainName + ".explorer.dexstats.info/tx/%s|" + defaultStrThirdPartyTxUrls;
+        defaultStrThirdPartyTxUrls = "https://" + strAssetchainName + ".explorer.vaporumcoin.us/tx/%s|" + defaultStrThirdPartyTxUrls;
     }
 
     if (!settings.contains("strThirdPartyTxUrls"))
