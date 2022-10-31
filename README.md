@@ -1,4 +1,4 @@
-# VaporumOcean (Vaporum-qt) #
+# VaporumOcean (Vaporum-qt) DO NOT BUILD FROM THIS REPO UNDER DEV #
 
 ![](./doc/images/Vaporum-logo.png)
 
