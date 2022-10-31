@@ -20,9 +20,9 @@
 #include "notaries_staked.h"
 #include "vaporum_hardfork.h"
 
-#define KOMODO_MAINNET_START 178999
-#define KOMODO_NOTARIES_HEIGHT1 814000
-#define KOMODO_NOTARIES_HEIGHT2 2588672
+#define VAPORUM_MAINNET_START 178999
+#define VAPORUM_NOTARIES_HEIGHT1 814000
+#define VAPORUM_NOTARIES_HEIGHT2 2588672
 
 #define CRYPTO777_PUBSECPSTR "020e46e79a2a8d12b9b5d12c7a91adb4e454edfae43c0a0cb805427d2ac7613fd9"
 
@@ -125,5 +125,5 @@ void vaporum_notaries_uninit(); // gets rid of values stored in statics
 void vaporum_statefile_uninit(); // closes statefile
 
 extern struct knotaries_entry *Pubkeys;
-#define KOMODO_STATES_NUMBER 2
-extern struct vaporum_state KOMODO_STATES[];
+#define VAPORUM_STATES_NUMBER 2
+extern struct vaporum_state VAPORUM_STATES[];

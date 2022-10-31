@@ -171,7 +171,7 @@ void OS_randombytes(unsigned char *x,long xlen);
 
 UniValue getnewaddress(const UniValue& params, bool fHelp, const CPubKey& mypk)
 {
-    if ( KOMODO_NSPV_FULLNODE && !EnsureWalletIsAvailable(fHelp) )
+    if ( VAPORUM_NSPV_FULLNODE && !EnsureWalletIsAvailable(fHelp) )
         return NullUniValue;
 
     if (fHelp || params.size() > 1)
@@ -187,7 +187,7 @@ UniValue getnewaddress(const UniValue& params, bool fHelp, const CPubKey& mypk)
             + HelpExampleRpc("getnewaddress", "")
         );
 
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         UniValue result(UniValue::VOBJ); uint8_t priv32[32];
 #ifndef WIN32
@@ -562,9 +562,9 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp, const CPubKey& mypk)
 }
 
 /* TODO: remove
-#define KOMODO_KVPROTECTED 1
-#define KOMODO_KVBINARY 2
-#define KOMODO_KVDURATION 1440
+#define VAPORUM_KVPROTECTED 1
+#define VAPORUM_KVBINARY 2
+#define VAPORUM_KVDURATION 1440
 #define IGUANA_MAXSCRIPTSIZE 10001
 #define CRYPTO777_KMDADDR "RXL3YXG2ceaB6C5hfJcN4fvmLH2C34knhA"
 #include "vaporum_defs.h"*/
@@ -573,7 +573,7 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp, const CPubKey& mypk)
 #define IGUANA_MAXSCRIPTSIZE 10001
 int32_t vaporum_opreturnscript(uint8_t *script,uint8_t type,uint8_t *opret,int32_t opretlen);
 #define CRYPTO777_KMDADDR "RXL3YXG2ceaB6C5hfJcN4fvmLH2C34knhA"
-extern uint64_t KOMODO_INTERESTSUM,KOMODO_WALLETBALANCE;
+extern uint64_t VAPORUM_INTERESTSUM,VAPORUM_WALLETBALANCE;
 int32_t iguana_rwnum(int32_t rwflag,uint8_t *serialized,int32_t len,void *endianedp);
 int32_t vaporum_kvsearch(uint256 *refpubkeyp,int32_t current_height,uint32_t *flagsp,int32_t *heightp,uint8_t value[IGUANA_MAXSCRIPTSIZE],uint8_t *key,int32_t keylen);
 uint64_t vaporum_kvfee(uint32_t flags,int32_t opretlen,int32_t keylen);
@@ -657,7 +657,7 @@ UniValue kvupdate(const UniValue& params, bool fHelp, const CPubKey& mypk)
         memcpy(keyvalue,key,keylen);
         if ( (refvaluesize= vaporum_kvsearch(&refpubkey,chainActive.Tip()->nHeight,&tmpflags,&height,&keyvalue[keylen],key,keylen)) >= 0 )
         {
-            if ( (tmpflags & KOMODO_KVPROTECTED) != 0 )
+            if ( (tmpflags & VAPORUM_KVPROTECTED) != 0 )
             {
                 if ( memcmp(&refpubkey,&pubkey,sizeof(refpubkey)) != 0 )
                 {
@@ -681,7 +681,7 @@ UniValue kvupdate(const UniValue& params, bool fHelp, const CPubKey& mypk)
         if ( memcmp(&zeroes,&refpubkey,sizeof(refpubkey)) != 0 )
             ret.push_back(Pair("owner",refpubkey.GetHex()));
         ret.push_back(Pair("height", (int64_t)height));
-        duration = vaporum_kvduration(flags); //((flags >> 2) + 1) * KOMODO_KVDURATION;
+        duration = vaporum_kvduration(flags); //((flags >> 2) + 1) * VAPORUM_KVDURATION;
         ret.push_back(Pair("expiration", (int64_t)(height+duration)));
         ret.push_back(Pair("flags",(int64_t)flags));
         ret.push_back(Pair("key",params[0].get_str()));
@@ -2909,13 +2909,13 @@ UniValue listunspent(const UniValue& params, bool fHelp, const CPubKey& mypk)
 }
 
 /****
- * @note also sets globals KOMODO_INTERESTSUM and KOMODO_WALLETBALANCE used for the getinfo RPC call
+ * @note also sets globals VAPORUM_INTERESTSUM and VAPORUM_WALLETBALANCE used for the getinfo RPC call
  * @returns amount of accrued interest in this wallet
  */
 uint64_t vaporum_interestsum()
 {
 #ifdef ENABLE_WALLET
-    if ( chainName.isKMD() && GetBoolArg("-disablewallet", false) == 0 && KOMODO_NSPV_FULLNODE )
+    if ( chainName.isKMD() && GetBoolArg("-disablewallet", false) == 0 && VAPORUM_NSPV_FULLNODE )
     {
         uint64_t interest,sum = 0; 
         int32_t txheight; 
@@ -2938,8 +2938,8 @@ uint64_t vaporum_interestsum()
                 }
             }
         }
-        KOMODO_INTERESTSUM = sum;
-        KOMODO_WALLETBALANCE = pwalletMain->GetBalance();
+        VAPORUM_INTERESTSUM = sum;
+        VAPORUM_WALLETBALANCE = pwalletMain->GetBalance();
         return(sum);
     }
 #endif
@@ -3666,7 +3666,7 @@ UniValue z_getnewaddress(const UniValue& params, bool fHelp, const CPubKey& mypk
     bool allowSapling = (Params().GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight <= chainActive.Tip()->nHeight);
 
     std::string defaultType;
-    if ( GetTime() < KOMODO_SAPLING_ACTIVATION )
+    if ( GetTime() < VAPORUM_SAPLING_ACTIVATION )
         defaultType = ADDR_TYPE_SPROUT;
     else defaultType = ADDR_TYPE_SAPLING;
 
@@ -3699,7 +3699,7 @@ UniValue z_getnewaddress(const UniValue& params, bool fHelp, const CPubKey& mypk
     string strAccount;
 
     if (addrType == ADDR_TYPE_SPROUT) {
-        if ( GetTime() >= KOMODO_SAPLING_DEADLINE )
+        if ( GetTime() >= VAPORUM_SAPLING_DEADLINE )
             throw JSONRPCError(RPC_INVALID_PARAMETER, "sprout not valid anymore");
         result = EncodePaymentAddress(pwalletMain->GenerateNewSproutZKey());
         strAccount = "z-sprout";
@@ -4513,7 +4513,7 @@ UniValue z_sendmany(const UniValue& params, bool fHelp, const CPubKey& mypk)
                         RPC_INVALID_PARAMETER,
                         "Cannot send to both Sprout and Sapling addresses using z_sendmany");
                 }
-                if ( GetTime() > KOMODO_SAPLING_DEADLINE )
+                if ( GetTime() > VAPORUM_SAPLING_DEADLINE )
                 {
                     if ( fromSprout || toSprout )
                         throw JSONRPCError(RPC_INVALID_PARAMETER,"Sprout usage has expired");
@@ -5651,7 +5651,7 @@ UniValue setpubkey(const UniValue& params, bool fHelp, const CPubKey& mypk)
                     if ( (STAKED_NOTARY_ID= StakedNotaryID(notaryname, Raddress)) > -1 ) 
                     {
                         result.push_back(Pair("IsNotary", notaryname));
-                        IS_KOMODO_NOTARY = false;
+                        IS_VAPORUM_NOTARY = false;
                     }
                 }
                 NOTARY_PUBKEY = params[0].get_str();
@@ -6885,7 +6885,7 @@ UniValue faucetfund(const UniValue& params, bool fHelp, const CPubKey& mypk)
     if ( fHelp || params.size() != 1 )
         throw runtime_error("faucetfund amount\n");
     funds = atof(params[0].get_str().c_str()) * COIN + 0.00000000499999;
-    if ( (0) && KOMODO_NSPV_SUPERLITE )
+    if ( (0) && VAPORUM_NSPV_SUPERLITE )
     {
         char coinaddr[64]; struct CCcontract_info *cp,C; CTxOut v;
         cp = CCinit(&C,EVAL_FAUCET);

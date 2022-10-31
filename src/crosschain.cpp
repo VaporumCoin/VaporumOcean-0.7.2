@@ -60,7 +60,7 @@ CrosschainType CrossChain::GetSymbolAuthority(const std::string& symbol)
     if (is_STAKED(symbol.c_str()) != 0)
         return CROSSCHAIN_STAKED;
 
-    return CROSSCHAIN_KOMODO;
+    return CROSSCHAIN_VAPORUM;
 }
 
 /***

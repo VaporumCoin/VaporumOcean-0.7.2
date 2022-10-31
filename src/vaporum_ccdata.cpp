@@ -21,7 +21,7 @@
 
 struct vaporum_ccdata *CC_data;
 // int32_t CC_firstheight;
-pthread_mutex_t KOMODO_CC_mutex; 
+pthread_mutex_t VAPORUM_CC_mutex; 
 
 uint256 vaporum_calcMoM(int32_t height,int32_t MoMdepth)
 {
@@ -46,7 +46,7 @@ struct vaporum_ccdata_entry *vaporum_allMoMs(int32_t *nump,uint256 *MoMoMp,int32
     struct vaporum_ccdata_entry *allMoMs=0; struct vaporum_ccdata *ccdata,*tmpptr; int32_t i,num,max;
     bool fMutated; std::vector<uint256> tree, leaves;
     num = max = 0;
-    portable_mutex_lock(&KOMODO_CC_mutex);
+    portable_mutex_lock(&VAPORUM_CC_mutex);
     DL_FOREACH_SAFE(CC_data,ccdata,tmpptr)
     {
         if ( ccdata->MoMdata.height <= kmdendi && ccdata->MoMdata.height >= kmdstarti )
@@ -66,7 +66,7 @@ struct vaporum_ccdata_entry *vaporum_allMoMs(int32_t *nump,uint256 *MoMoMp,int32
         if ( ccdata->MoMdata.height < kmdstarti )
             break;
     }
-    portable_mutex_unlock(&KOMODO_CC_mutex);
+    portable_mutex_unlock(&VAPORUM_CC_mutex);
     if ( (*nump= num) > 0 )
     {
         for (i=0; i<num; i++)
@@ -112,7 +112,7 @@ int32_t vaporum_MoMoMdata(char *hexstr,int32_t hexsize,struct vaporum_ccdataMoMo
         return(-1);
     }
     memset(mdata,0,sizeof(*mdata));
-    portable_mutex_lock(&KOMODO_CC_mutex);
+    portable_mutex_lock(&VAPORUM_CC_mutex);
     DL_FOREACH_SAFE(CC_data,ccdata,tmpptr)
     {
         if ( ccdata->MoMdata.height < kmdheight )
@@ -136,7 +136,7 @@ int32_t vaporum_MoMoMdata(char *hexstr,int32_t hexsize,struct vaporum_ccdataMoMo
             starti = ccdata->MoMdata.height;
         }
     }
-    portable_mutex_unlock(&KOMODO_CC_mutex);
+    portable_mutex_unlock(&VAPORUM_CC_mutex);
     mdata->kmdstarti = starti;
     mdata->kmdendi = endi;
     if ( starti != 0 && endi != 0 && endi >= starti )
@@ -185,7 +185,7 @@ void vaporum_purge_ccdata(int32_t height)
     struct vaporum_ccdata *ccdata,*tmpptr;
     if ( chainName.isKMD() )
     {
-        portable_mutex_lock(&KOMODO_CC_mutex);
+        portable_mutex_lock(&VAPORUM_CC_mutex);
         DL_FOREACH_SAFE(CC_data,ccdata,tmpptr)
         {
             if ( ccdata->MoMdata.height >= height )
@@ -195,7 +195,7 @@ void vaporum_purge_ccdata(int32_t height)
                 free(ccdata);
             } else break;
         }
-        portable_mutex_unlock(&KOMODO_CC_mutex);
+        portable_mutex_unlock(&VAPORUM_CC_mutex);
     }
     else
     {

@@ -22,17 +22,17 @@
 
 #define NUM_KMD_NOTARIES 64
 
-#define KOMODO_EARLYTXID_HEIGHT 100
+#define VAPORUM_EARLYTXID_HEIGHT 100
 #define ASSETCHAINS_MINHEIGHT 128
-#define KOMODO_ELECTION_GAP 2000
-#define KOMODO_ASSETCHAIN_MAXLEN 65
-#define KOMODO_LIMITED_NETWORKSIZE 4
+#define VAPORUM_ELECTION_GAP 2000
+#define VAPORUM_ASSETCHAIN_MAXLEN 65
+#define VAPORUM_LIMITED_NETWORKSIZE 4
 #define IGUANA_MAXSCRIPTSIZE 10001
-#define KOMODO_MAXMEMPOOLTIME 3600 // affects consensus, 3600 secs = 1hr
+#define VAPORUM_MAXMEMPOOLTIME 3600 // affects consensus, 3600 secs = 1hr
 #define CRYPTO777_PUBSECPSTR "020e46e79a2a8d12b9b5d12c7a91adb4e454edfae43c0a0cb805427d2ac7613fd9"
-#define KOMODO_FIRSTFUNGIBLEID 100
-#define KOMODO_SAPLING_ACTIVATION 1544832000 // Dec 15th, 2018
-#define KOMODO_SAPLING_DEADLINE 1550188800 // Feb 15th, 2019
+#define VAPORUM_FIRSTFUNGIBLEID 100
+#define VAPORUM_SAPLING_ACTIVATION 1544832000 // Dec 15th, 2018
+#define VAPORUM_SAPLING_DEADLINE 1550188800 // Feb 15th, 2019
 #define ASSETCHAINS_STAKED_BLOCK_FUTURE_MAX 57
 #define ASSETCHAINS_STAKED_BLOCK_FUTURE_HALF 27
 #define ASSETCHAINS_STAKED_MIN_POW_DIFF 536900000 // 537000000 537300000
@@ -42,9 +42,9 @@
 #define GETBIT(bits,bitoffset) (((uint8_t *)bits)[(bitoffset) >> 3] & (1 << ((bitoffset) & 7)))
 #define CLEARBIT(bits,bitoffset) (((uint8_t *)bits)[(bitoffset) >> 3] &= ~(1 << ((bitoffset) & 7)))
 
-#define KOMODO_MAXNVALUE (((uint64_t)1 << 63) - 1)
-#define KOMODO_BIT63SET(x) ((x) & ((uint64_t)1 << 63))
-#define KOMODO_VALUETOOBIG(x) ((x) > (uint64_t)10000000001*COIN)
+#define VAPORUM_MAXNVALUE (((uint64_t)1 << 63) - 1)
+#define VAPORUM_BIT63SET(x) ((x) & ((uint64_t)1 << 63))
+#define VAPORUM_VALUETOOBIG(x) ((x) > (uint64_t)10000000001*COIN)
 
 
 #define SATOSHIDEN ((uint64_t)100000000L)
@@ -57,7 +57,7 @@ int32_t MAX_BLOCK_SIZE(int32_t height);
 
 extern int32_t ASSETCHAINS_BLOCKTIME;
 extern uint32_t ASSETCHAINS_ALGO;
-extern int32_t KOMODO_LONGESTCHAIN,USE_EXTERNAL_PUBKEY;
+extern int32_t VAPORUM_LONGESTCHAIN,USE_EXTERNAL_PUBKEY;
 extern uint64_t ASSETCHAINS_COMMISSION;
 extern uint64_t ASSETCHAINS_NONCEMASK[],ASSETCHAINS_NK[2];
 extern const char *ASSETCHAINS_ALGORITHMS[];
@@ -65,8 +65,8 @@ extern uint32_t ASSETCHAINS_NONCESHIFT[];
 
 extern std::string CCerror;
 
-extern bool IS_KOMODO_TESTNODE;
-extern int32_t KOMODO_SNAPSHOT_INTERVAL;
+extern bool IS_VAPORUM_TESTNODE;
+extern int32_t VAPORUM_SNAPSHOT_INTERVAL;
 extern int32_t ASSETCHAINS_EARLYTXIDCONTRACT;
 extern int32_t ASSETCHAINS_STAKED_SPLIT_PERCENTAGE;
 extern std::map <std::int8_t, int32_t> mapHeightEvalActivate;
@@ -81,8 +81,8 @@ int32_t getkmdseason(int32_t height);
 
 #define IGUANA_MAXSCRIPTSIZE 10001
 */
-#define KOMODO_KVDURATION 1440
-#define KOMODO_KVPROTECTED 1
+#define VAPORUM_KVDURATION 1440
+#define VAPORUM_KVPROTECTED 1
 /*#define PRICES_MAXDATAPOINTS 8
 int32_t vaporum_notaries(uint8_t pubkeys[64][33],int32_t height,uint32_t timestamp);
 char *bitcoin_address(char *coinaddr,uint8_t addrtype,uint8_t *pubkey_or_rmd160,int32_t len);
@@ -110,10 +110,10 @@ int32_t vaporum_blockload(CBlock& block, CBlockIndex *pindex);
 uint32_t vaporum_chainactive_timestamp();
 uint32_t GetLatestTimestamp(int32_t height);
 */
-#ifndef KOMODO_NSPV_FULLNODE
-#define KOMODO_NSPV_FULLNODE (KOMODO_NSPV <= 0)
-#endif // !KOMODO_NSPV_FULLNODE
-#ifndef KOMODO_NSPV_SUPERLITE
-#define KOMODO_NSPV_SUPERLITE (KOMODO_NSPV > 0)
-#endif // !KOMODO_NSPV_SUPERLITE
+#ifndef VAPORUM_NSPV_FULLNODE
+#define VAPORUM_NSPV_FULLNODE (VAPORUM_NSPV <= 0)
+#endif // !VAPORUM_NSPV_FULLNODE
+#ifndef VAPORUM_NSPV_SUPERLITE
+#define VAPORUM_NSPV_SUPERLITE (VAPORUM_NSPV > 0)
+#endif // !VAPORUM_NSPV_SUPERLITE
 

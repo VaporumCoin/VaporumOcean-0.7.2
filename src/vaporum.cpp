@@ -22,14 +22,14 @@
 #include "notaries_staked.h"
 
 static FILE *fp; // for stateupdate
-//int32_t KOMODO_EXTERNAL_NOTARIES = 0; //todo remove
+//int32_t VAPORUM_EXTERNAL_NOTARIES = 0; //todo remove
 #include "vaporum_gateway.h"
 #include "vaporum_events.h"
 #include "vaporum_ccdata.h"
 
 void vaporum_currentheight_set(int32_t height)
 {
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
     if ( (sp= vaporum_stateptr(symbol,dest)) != 0 )
         sp->CURRENT_HEIGHT = height;
 }
@@ -38,8 +38,8 @@ extern NSPV_inforesp NSPV_inforesult;
 
 int32_t vaporum_currentheight()
 {
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
-    if ( KOMODO_NSPV_SUPERLITE )
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         return (NSPV_inforesult.height);
     }
@@ -68,7 +68,7 @@ int32_t vaporum_parsestatefile(struct vaporum_state *sp,FILE *fp,char *symbol,ch
             if ( func == 'P' )
             {
                 vaporum::event_pubkeys pk(fp, ht);
-                if ( (KOMODO_EXTERNAL_NOTARIES && matched ) || (strcmp(symbol,"KMD") == 0 && !KOMODO_EXTERNAL_NOTARIES) )
+                if ( (VAPORUM_EXTERNAL_NOTARIES && matched ) || (strcmp(symbol,"KMD") == 0 && !VAPORUM_EXTERNAL_NOTARIES) )
                 {
                     vaporum_eventadd_pubkeys(sp, symbol, ht, pk);
                 }
@@ -146,7 +146,7 @@ int32_t vaporum_parsestatefiledata(struct vaporum_state *sp,uint8_t *filedata,lo
             if ( func == 'P' )
             {
                 vaporum::event_pubkeys pk(filedata, fpos, datalen, ht);
-                if ( (KOMODO_EXTERNAL_NOTARIES && matched ) || (strcmp(symbol,"KMD") == 0 && !KOMODO_EXTERNAL_NOTARIES) )
+                if ( (VAPORUM_EXTERNAL_NOTARIES && matched ) || (strcmp(symbol,"KMD") == 0 && !VAPORUM_EXTERNAL_NOTARIES) )
                 {
                     vaporum_eventadd_pubkeys(sp, symbol, ht, pk);
                 }
@@ -208,18 +208,18 @@ void vaporum_stateupdate(int32_t height,uint8_t notarypubs[][33],uint8_t numnota
     static int32_t errs,didinit; 
     static uint256 zero;
     struct vaporum_state *sp; 
-    char fname[MAX_STATEFNAME+1],symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN]; 
+    char fname[MAX_STATEFNAME+1],symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN]; 
     int32_t ht,func;
     uint8_t num,pubkeys[64][33];
 
     if ( didinit == 0 )
     {
-        portable_mutex_init(&KOMODO_CC_mutex);
+        portable_mutex_init(&VAPORUM_CC_mutex);
         didinit = 1;
     }
     if ( (sp= vaporum_stateptr(symbol,dest)) == 0 )
     {
-        KOMODO_INITDONE = (uint32_t)time(NULL);
+        VAPORUM_INITDONE = (uint32_t)time(NULL);
         LogPrintf("[%s] no vaporum_stateptr\n",chainName.symbol().c_str());
         return;
     }
@@ -243,7 +243,7 @@ void vaporum_stateupdate(int32_t height,uint8_t notarypubs[][33],uint8_t numnota
 
         if (ShutdownRequested()) { fclose(fp); return; }
         
-        KOMODO_INITDONE = (uint32_t)time(NULL);
+        VAPORUM_INITDONE = (uint32_t)time(NULL);
     }
     if ( height <= 0 )
     {
@@ -324,7 +324,7 @@ void vaporum_stateupdate(int32_t height,uint8_t notarypubs[][33],uint8_t numnota
 
 int32_t vaporum_validate_chain(uint256 srchash,int32_t notarized_height)
 {
-    static int32_t last_rewind; int32_t rewindtarget; CBlockIndex *pindex; struct vaporum_state *sp; char symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN];
+    static int32_t last_rewind; int32_t rewindtarget; CBlockIndex *pindex; struct vaporum_state *sp; char symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN];
     if ( (sp= vaporum_stateptr(symbol,dest)) == 0 )
         return(0);
     if ( IsInitialBlockDownload() == 0 && ((pindex= vaporum_getblockindex(srchash)) == 0 || pindex->nHeight != notarized_height) )
@@ -334,7 +334,7 @@ int32_t vaporum_validate_chain(uint256 srchash,int32_t notarized_height)
         else if ( notarized_height > 101 )
             rewindtarget = notarized_height - 101;
         else rewindtarget = 0;
-        if ( rewindtarget != 0 && rewindtarget > KOMODO_REWIND && rewindtarget > last_rewind )
+        if ( rewindtarget != 0 && rewindtarget > VAPORUM_REWIND && rewindtarget > last_rewind )
         {
             if ( last_rewind != 0 )
             {
@@ -354,16 +354,16 @@ int32_t vaporum_voutupdate(bool fJustCheck,int32_t *isratificationp,int32_t nota
         uint64_t signedmask,uint32_t timestamp)
 {
     static uint256 zero; static FILE *signedfp;
-    int32_t opretlen,nid,offset,k,MoMdepth,matched,len = 0; uint256 MoM,srchash,desttxid; uint8_t crypto777[33]; struct vaporum_state *sp; char symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN];
+    int32_t opretlen,nid,offset,k,MoMdepth,matched,len = 0; uint256 MoM,srchash,desttxid; uint8_t crypto777[33]; struct vaporum_state *sp; char symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN];
     if ( (sp= vaporum_stateptr(symbol,dest)) == 0 )
         return(-1);
     if ( scriptlen == 35 && scriptbuf[0] == 33 && scriptbuf[34] == 0xac )
     {
-        if ( i == 0 && j == 0 && memcmp(NOTARY_PUBKEY33,scriptbuf+1,33) == 0 && IS_KOMODO_NOTARY )
+        if ( i == 0 && j == 0 && memcmp(NOTARY_PUBKEY33,scriptbuf+1,33) == 0 && IS_VAPORUM_NOTARY )
         {
-            LogPrintf("%s KOMODO_LASTMINED.%d -> %d\n",chainName.symbol().c_str(),KOMODO_LASTMINED,height);
-            prevKOMODO_LASTMINED = KOMODO_LASTMINED;
-            KOMODO_LASTMINED = height;
+            LogPrintf("%s VAPORUM_LASTMINED.%d -> %d\n",chainName.symbol().c_str(),VAPORUM_LASTMINED,height);
+            prevVAPORUM_LASTMINED = VAPORUM_LASTMINED;
+            VAPORUM_LASTMINED = height;
         }
         decode_hex(crypto777,33,CRYPTO777_PUBSECPSTR);
         /*for (k=0; k<33; k++)
@@ -432,7 +432,7 @@ int32_t vaporum_voutupdate(bool fJustCheck,int32_t *isratificationp,int32_t nota
         if ( j == 1 && opretlen >= len+offset-opoffset )
         {
             memset(&MoMoMdata,0,sizeof(MoMoMdata));
-            if ( matched == 0 && signedmask != 0 && bitweight(signedmask) >= KOMODO_MINRATIFY )
+            if ( matched == 0 && signedmask != 0 && bitweight(signedmask) >= VAPORUM_MINRATIFY )
                 notarized = 1;
             if ( strcmp("PIZZA",ccdata.symbol) == 0 || strncmp("TXSCL",ccdata.symbol,5) == 0 || strcmp("BEER",ccdata.symbol) == 0)
                 notarized = 1;
@@ -582,7 +582,7 @@ int32_t vaporum_voutupdate(bool fJustCheck,int32_t *isratificationp,int32_t nota
 }
 
 // Special tx have vout[0] -> CRYPTO777
-// with more than KOMODO_MINRATIFY pay2pubkey outputs -> ratify
+// with more than VAPORUM_MINRATIFY pay2pubkey outputs -> ratify
 // if all outputs to notary -> notary utxo
 // if txi == 0 && 2 outputs and 2nd OP_RETURN, len == 32*2+4 -> notarized, 1st byte 'P' -> pricefeed
 // OP_RETURN: 'D' -> deposit, 'W' -> withdraw
@@ -637,7 +637,7 @@ int32_t vaporum_connectblock(bool fJustCheck, CBlockIndex *pindex,CBlock& block)
     static int32_t hwmheight;
     int32_t staked_era; static int32_t lastStakedEra;
     std::vector<int32_t> notarisations;
-    uint64_t signedmask,voutmask; char symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
+    uint64_t signedmask,voutmask; char symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
     uint8_t scriptbuf[10001],pubkeys[64][33],rmd160[20],scriptPubKey[35]; uint256 zero,btctxid,txhash;
     int32_t i,j,k,numnotaries,notarized,scriptlen,isratification,nid,numvalid,specialtx,notarizedheight,notaryid,len,numvouts,numvins,height,txn_count;
     if ( pindex == 0 )
@@ -647,7 +647,7 @@ int32_t vaporum_connectblock(bool fJustCheck, CBlockIndex *pindex,CBlock& block)
     }
     memset(&zero,0,sizeof(zero));
     vaporum_init(pindex->nHeight);
-    KOMODO_INITDONE = (uint32_t)time(NULL);
+    VAPORUM_INITDONE = (uint32_t)time(NULL);
     if ( (sp= vaporum_stateptr(symbol,dest)) == 0 )
     {
         LogPrintf("unexpected null vaporumstateptr.[%s]\n",chainName.symbol().c_str());
@@ -723,8 +723,8 @@ int32_t vaporum_connectblock(bool fJustCheck, CBlockIndex *pindex,CBlock& block)
                 } //else LogPrintf("cant get scriptPubKey for ht.%d txi.%d vin.%d\n",height,i,j);
             }
             numvalid = bitweight(signedmask);
-            if ( ((height < 90000 || (signedmask & 1) != 0) && numvalid >= KOMODO_MINRATIFY) 
-                    || (numvalid >= KOMODO_MINRATIFY && !chainName.isKMD()) 
+            if ( ((height < 90000 || (signedmask & 1) != 0) && numvalid >= VAPORUM_MINRATIFY) 
+                    || (numvalid >= VAPORUM_MINRATIFY && !chainName.isKMD()) 
                     || numvalid > (numnotaries/5) )
             {
                 if ( !fJustCheck && !chainName.isKMD() )
@@ -805,17 +805,17 @@ int32_t vaporum_connectblock(bool fJustCheck, CBlockIndex *pindex,CBlock& block)
                     }
                     if ( !chainName.isKMD() || height < 100000 )
                     {
-                        if ( ((signedmask & 1) != 0 && numvalid >= KOMODO_MINRATIFY) || bitweight(signedmask) > (numnotaries/3) )
+                        if ( ((signedmask & 1) != 0 && numvalid >= VAPORUM_MINRATIFY) || bitweight(signedmask) > (numnotaries/3) )
                         {
                             memset(&txhash,0,sizeof(txhash));
                             vaporum_stateupdate(height,pubkeys,numvalid,0,txhash,0,0,0,0,0,0,0,0,zero,0);
-                            LogPrintf("RATIFIED! >>>>>>>>>> new notaries.%d newheight.%d from height.%d\n",numvalid,(((height+KOMODO_ELECTION_GAP/2)/KOMODO_ELECTION_GAP)+1)*KOMODO_ELECTION_GAP,height);
+                            LogPrintf("RATIFIED! >>>>>>>>>> new notaries.%d newheight.%d from height.%d\n",numvalid,(((height+VAPORUM_ELECTION_GAP/2)/VAPORUM_ELECTION_GAP)+1)*VAPORUM_ELECTION_GAP,height);
                         } else LogPrintf("signedmask.%llx numvalid.%d wt.%d numnotaries.%d\n",(long long)signedmask,numvalid,bitweight(signedmask),numnotaries);
                     }
                 }
             }
         }
-        if ( !fJustCheck && IS_KOMODO_NOTARY && chainName.isKMD() )
+        if ( !fJustCheck && IS_VAPORUM_NOTARY && chainName.isKMD() )
             LogPrintf("%s ht.%d\n",chainName.ToString().c_str(),height);
         if ( !fJustCheck && pindex->nHeight == hwmheight )
             vaporum_stateupdate(height,0,0,0,zero,0,0,height,(uint32_t)pindex->nTime,0,0,0,0,zero,0);

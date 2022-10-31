@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_UTILITYDIALOG_H
-#define KOMODO_QT_UTILITYDIALOG_H
+#ifndef VAPORUM_QT_UTILITYDIALOG_H
+#define VAPORUM_QT_UTILITYDIALOG_H
 
 #include <QDialog>
 #include <QObject>
@@ -48,4 +48,4 @@ protected:
     void closeEvent(QCloseEvent *event);
 };
 
-#endif // KOMODO_QT_UTILITYDIALOG_H
+#endif // VAPORUM_QT_UTILITYDIALOG_H

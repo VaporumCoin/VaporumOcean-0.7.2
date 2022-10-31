@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_OPTIONSDIALOG_H
-#define KOMODO_QT_OPTIONSDIALOG_H
+#ifndef VAPORUM_QT_OPTIONSDIALOG_H
+#define VAPORUM_QT_OPTIONSDIALOG_H
 
 #include <QDialog>
 #include <QValidator>
@@ -68,4 +68,4 @@ private:
     QDataWidgetMapper *mapper;
 };
 
-#endif // KOMODO_QT_OPTIONSDIALOG_H
+#endif // VAPORUM_QT_OPTIONSDIALOG_H

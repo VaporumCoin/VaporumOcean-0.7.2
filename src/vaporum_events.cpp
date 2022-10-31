@@ -19,12 +19,12 @@
 #include "vaporum_utils.h" // portable_mutex_lock / unlock
 #include "vaporum_kv.h"
 
-#define KOMODO_EVENT_RATIFY 'P'
-#define KOMODO_EVENT_NOTARIZED 'N'
-#define KOMODO_EVENT_KMDHEIGHT 'K'
-#define KOMODO_EVENT_REWIND 'B'
-#define KOMODO_EVENT_PRICEFEED 'V'
-#define KOMODO_EVENT_OPRETURN 'R'
+#define VAPORUM_EVENT_RATIFY 'P'
+#define VAPORUM_EVENT_NOTARIZED 'N'
+#define VAPORUM_EVENT_KMDHEIGHT 'K'
+#define VAPORUM_EVENT_REWIND 'B'
+#define VAPORUM_EVENT_PRICEFEED 'V'
+#define VAPORUM_EVENT_OPRETURN 'R'
 
 /*****
  * Add a notarized event to the collection
@@ -35,7 +35,7 @@
  */
 void vaporum_eventadd_notarized( vaporum_state *sp, char *symbol, int32_t height, vaporum::event_notarized& ntz)
 {
-    if ( IS_KOMODO_NOTARY 
+    if ( IS_VAPORUM_NOTARY 
             && vaporum_verifynotarization(symbol,ntz.dest,height,ntz.notarizedheight,ntz.blockhash, ntz.desttxid) < 0 )
 {
         static uint32_t counter;
@@ -129,11 +129,11 @@ void vaporum_event_rewind(vaporum_state *sp, char *symbol, int32_t height)
 {
     if ( sp != nullptr )
     {
-        if ( chainName.isKMD() && height <= KOMODO_LASTMINED && prevKOMODO_LASTMINED != 0 )
+        if ( chainName.isKMD() && height <= VAPORUM_LASTMINED && prevVAPORUM_LASTMINED != 0 )
         {
-            LogPrintf("undo KOMODO_LASTMINED %d <- %d\n",KOMODO_LASTMINED,prevKOMODO_LASTMINED);
-            KOMODO_LASTMINED = prevKOMODO_LASTMINED;
-            prevKOMODO_LASTMINED = 0;
+            LogPrintf("undo VAPORUM_LASTMINED %d <- %d\n",VAPORUM_LASTMINED,prevVAPORUM_LASTMINED);
+            VAPORUM_LASTMINED = prevVAPORUM_LASTMINED;
+            prevVAPORUM_LASTMINED = 0;
         }
         while ( sp->events.size() > 0)
         {

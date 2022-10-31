@@ -173,7 +173,7 @@ QT_MOC_CPP = \
   qt/moc_walletmodel.cpp \
   qt/moc_walletview.cpp
 
-KOMODO_MM = qt/macdockiconhandler.mm
+VAPORUM_MM = qt/macdockiconhandler.mm
 #\
 #  qt/macdockiconhandler.mm \
 #  qt/macnotificationhandler.mm
@@ -201,7 +201,7 @@ else
   PROTOBUF_PROTO =
 endif
 
-KOMODO_QT_H = \
+VAPORUM_QT_H = \
   qt/addressbookpage.h \
   qt/zaddressbookpage.h \
   qt/addresstablemodel.h \
@@ -317,7 +317,7 @@ RES_ICONS = \
   qt/res/icons/warning.png \
   qt/res/icons/verify.png
 
-KOMODO_QT_BASE_CPP = \
+VAPORUM_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
   qt/vaporumaddressvalidator.cpp \
   qt/vaporumamountfield.cpp \
@@ -341,9 +341,9 @@ KOMODO_QT_BASE_CPP = \
   qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp
 
-KOMODO_QT_WINDOWS_CPP = qt/winshutdownmonitor.cpp
+VAPORUM_QT_WINDOWS_CPP = qt/winshutdownmonitor.cpp
 
-KOMODO_QT_WALLET_CPP = \
+VAPORUM_QT_WALLET_CPP = \
   qt/addressbookpage.cpp \
   qt/zaddressbookpage.cpp \
   qt/addresstablemodel.cpp \
@@ -376,26 +376,26 @@ KOMODO_QT_WALLET_CPP = \
   qt/walletview.cpp
 
 
-KOMODO_QT_WALLET_BIP70_CPP = \
+VAPORUM_QT_WALLET_BIP70_CPP = \
   qt/paymentrequestplus.cpp 
 
 red:=$(shell tput setaf 11)
 reset:=$(shell tput sgr0)
 
-KOMODO_QT_CPP = $(KOMODO_QT_BASE_CPP)
+VAPORUM_QT_CPP = $(VAPORUM_QT_BASE_CPP)
 if TARGET_WINDOWS
-KOMODO_QT_CPP += $(KOMODO_QT_WINDOWS_CPP)
+VAPORUM_QT_CPP += $(VAPORUM_QT_WINDOWS_CPP)
 endif
 if ENABLE_WALLET
-KOMODO_QT_CPP += $(KOMODO_QT_WALLET_CPP)
+VAPORUM_QT_CPP += $(VAPORUM_QT_WALLET_CPP)
 if ENABLE_BIP70
-KOMODO_QT_CPP += $(KOMODO_QT_WALLET_BIP70_CPP)
+VAPORUM_QT_CPP += $(VAPORUM_QT_WALLET_BIP70_CPP)
 endif # ENABLE_BIP70
 endif # ENABLE_WALLET
 
-KOMODO_QT_H += \
+VAPORUM_QT_H += \
 	policy/policy.h 
-KOMODO_QT_CPP += \
+VAPORUM_QT_CPP += \
 	policy/policy.cpp \
 	wallet/rpcwallet.cpp \
 	rpc/server.cpp
@@ -405,16 +405,16 @@ RES_IMAGES =
 
 RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)
 
-KOMODO_RC = qt/res/vaporum-qt-res.rc
+VAPORUM_RC = qt/res/vaporum-qt-res.rc
 
-KOMODO_QT_INCLUDES = -I$(builddir)/qt -I$(srcdir)/qt -I$(srcdir)/qt/forms \
+VAPORUM_QT_INCLUDES = -I$(builddir)/qt -I$(srcdir)/qt -I$(srcdir)/qt/forms \
   -I$(builddir)/qt/forms -DQT_NO_KEYWORDS 
 
-qt_libvaporumqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(KOMODO_QT_INCLUDES) \
+qt_libvaporumqt_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(VAPORUM_QT_INCLUDES) \
   $(QT_INCLUDES) $(QT_DBUS_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS)
 qt_libvaporumqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
-qt_libvaporumqt_a_SOURCES = $(KOMODO_QT_CPP) $(KOMODO_QT_H) $(QT_FORMS_UI) \
+qt_libvaporumqt_a_SOURCES = $(VAPORUM_QT_CPP) $(VAPORUM_QT_H) $(QT_FORMS_UI) \
   $(QT_QRC) $(QT_QRC_LOCALE) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_MOVIES)
 
 nodist_qt_libvaporumqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
@@ -434,16 +434,16 @@ $(QT_MOC): $(PROTOBUF_H)
 $(QT_MOC_CPP): $(PROTOBUF_H)
 
 # vaporum-qt binary #
-qt_vaporum_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(KOMODO_QT_INCLUDES) \
+qt_vaporum_qt_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(VAPORUM_QT_INCLUDES) \
   $(QT_INCLUDES) $(PROTOBUF_CFLAGS) $(QR_CFLAGS) 
 qt_vaporum_qt_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 
 qt_vaporum_qt_SOURCES = qt/vaporumapp.cpp
 if TARGET_DARWIN
-  qt_vaporum_qt_SOURCES += $(KOMODO_MM)
+  qt_vaporum_qt_SOURCES += $(VAPORUM_MM)
 endif
 if TARGET_WINDOWS
-  qt_vaporum_qt_SOURCES += $(KOMODO_RC)
+  qt_vaporum_qt_SOURCES += $(VAPORUM_RC)
 endif
 
 qt_vaporum_qt_LDADD = $(LIBBITCOIN_SERVER) qt/libvaporumqt.a
@@ -526,7 +526,7 @@ $(srcdir)/qt/vaporumstrings.cpp: $(libvaporum_server_a_SOURCES) $(libvaporum_wal
 	@test -n $(XGETTEXT) || echo "xgettext is required for updating translations"
 	$(AM_V_GEN) cd $(srcdir); XGETTEXT=$(XGETTEXT) PACKAGE_NAME="$(PACKAGE_NAME)" COPYRIGHT_HOLDERS="$(COPYRIGHT_HOLDERS)" COPYRIGHT_HOLDERS_SUBSTITUTION="$(COPYRIGHT_HOLDERS_SUBSTITUTION)" $(PYTHON) ../share/qt/extract_strings_qt.py $^
 
-translate: $(srcdir)/qt/vaporumstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(KOMODO_QT_BASE_CPP) qt/vaporumapp.cpp $(KOMODO_QT_WINDOWS_CPP) $(KOMODO_QT_WALLET_CPP) $(KOMODO_QT_H) $(KOMODO_MM)
+translate: $(srcdir)/qt/vaporumstrings.cpp $(QT_FORMS_UI) $(QT_FORMS_UI) $(VAPORUM_QT_BASE_CPP) qt/vaporumapp.cpp $(VAPORUM_QT_WINDOWS_CPP) $(VAPORUM_QT_WALLET_CPP) $(VAPORUM_QT_H) $(VAPORUM_MM)
 	@test -n $(LUPDATE) || echo "lupdate is required for updating translations"
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(LUPDATE) $^ -locations relative -no-obsolete -ts $(srcdir)/qt/locale/vaporum_en.ts
 

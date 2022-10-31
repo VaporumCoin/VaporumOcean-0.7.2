@@ -182,7 +182,7 @@ UniValue getgenerate(const UniValue& params, bool fHelp, const CPubKey& mypk)
         staking = true;
     obj.push_back(Pair("staking",          staking));
     obj.push_back(Pair("generate",         GetBoolArg("-gen", false) && GetBoolArg("-genproclimit", -1) != 0 ));
-    obj.push_back(Pair("numthreads",       (int64_t)KOMODO_MININGTHREADS));
+    obj.push_back(Pair("numthreads",       (int64_t)VAPORUM_MININGTHREADS));
     return obj;
 }
 
@@ -253,7 +253,7 @@ std::shared_ptr<CBlock> generateBlock(CWallet* wallet, CValidationState* validat
         nHeight = chainActive.Height();
     }
 
-    std::unique_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey,nHeight,KOMODO_MAXGPUCOUNT));
+    std::unique_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey,nHeight,VAPORUM_MAXGPUCOUNT));
     if (pblocktemplate == nullptr)
         return nullptr;
 
@@ -344,7 +344,7 @@ UniValue generate(const UniValue& params, bool fHelp, const CPubKey& mypk)
         lastTime = GetTime();
 
 #ifdef ENABLE_WALLET
-        std::unique_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey,nHeight,KOMODO_MAXGPUCOUNT));
+        std::unique_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey(reservekey,nHeight,VAPORUM_MAXGPUCOUNT));
 #else
         std::unique_ptr<CBlockTemplate> pblocktemplate(CreateNewBlockWithKey());
 #endif
@@ -415,10 +415,10 @@ UniValue setgenerate(const UniValue& params, bool fHelp, const CPubKey& mypk)
         //    fGenerate = false;
     }
 
-    KOMODO_MININGTHREADS = (int32_t)nGenProcLimit;
+    VAPORUM_MININGTHREADS = (int32_t)nGenProcLimit;
 
     mapArgs["-gen"] = (fGenerate ? "1" : "0");
-    mapArgs ["-genproclimit"] = itostr(KOMODO_MININGTHREADS);
+    mapArgs ["-genproclimit"] = itostr(VAPORUM_MININGTHREADS);
 
 #ifdef ENABLE_WALLET
     GenerateBitcoins(fGenerate, pwalletMain, nGenProcLimit);
@@ -530,7 +530,7 @@ UniValue getmininginfo(const UniValue& params, bool fHelp, const CPubKey& mypk)
         staking = true;
     obj.push_back(Pair("staking",          staking));
     obj.push_back(Pair("generate",         GetBoolArg("-gen", false) && GetBoolArg("-genproclimit", -1) != 0 ));
-    obj.push_back(Pair("numthreads",       (int64_t)KOMODO_MININGTHREADS));
+    obj.push_back(Pair("numthreads",       (int64_t)VAPORUM_MININGTHREADS));
 #endif
     return obj;
 }
@@ -813,7 +813,7 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp, const CPubKey& myp
 #ifdef ENABLE_WALLET
         CReserveKey reservekey(pwalletMain);
         LEAVE_CRITICAL_SECTION(cs_main);
-        pblocktemplate = CreateNewBlockWithKey(reservekey,pindexPrevNew->nHeight+1,KOMODO_MAXGPUCOUNT,false);
+        pblocktemplate = CreateNewBlockWithKey(reservekey,pindexPrevNew->nHeight+1,VAPORUM_MAXGPUCOUNT,false);
 #else
         pblocktemplate = CreateNewBlockWithKey();
 #endif

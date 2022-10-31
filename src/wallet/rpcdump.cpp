@@ -995,7 +995,7 @@ UniValue nspv_getinfo(const UniValue& params, bool fHelp, const CPubKey& mypk)
     int32_t reqht = 0;
     if ( fHelp || params.size() > 1 )
         throw runtime_error("nspv_getinfo [hdrheight]\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     if ( params.size() == 1 )
         reqht = atoi((char *)params[0].get_str().c_str());
@@ -1006,7 +1006,7 @@ UniValue nspv_logout(const UniValue& params, bool fHelp, const CPubKey& mypk)
 {
     if ( fHelp || params.size() != 0 )
         throw runtime_error("nspv_logout\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     return(NSPV_logout());
 }
@@ -1015,7 +1015,7 @@ UniValue nspv_login(const UniValue& params, bool fHelp, const CPubKey& mypk)
 {
     if ( fHelp || params.size() != 1 )
         throw runtime_error("nspv_login wif\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     return(NSPV_login((char *)params[0].get_str().c_str()));
 }
@@ -1025,7 +1025,7 @@ UniValue nspv_listunspent(const UniValue& params, bool fHelp, const CPubKey& myp
     int32_t skipcount = 0,CCflag = 0;
     if ( fHelp || params.size() > 3 )
         throw runtime_error("nspv_listunspent [address [isCC [skipcount]]]\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     if ( params.size() == 0 )
     {
@@ -1050,7 +1050,7 @@ UniValue nspv_mempool(const UniValue& params, bool fHelp, const CPubKey& mypk)
     memset(&txid,0,sizeof(txid));
     if ( fHelp || params.size() > 5 )
         throw runtime_error("nspv_mempool func(0 all, 1 address recv, 2 txid/vout spent, 3 txid inmempool) address isCC [txid vout]]]\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     funcid = atoi((char *)params[0].get_str().c_str());
     coinaddr = (char *)params[1].get_str().c_str();
@@ -1070,7 +1070,7 @@ UniValue nspv_listtransactions(const UniValue& params, bool fHelp, const CPubKey
     int32_t skipcount = 0,CCflag = 0;
     if ( fHelp || params.size() > 3 )
         throw runtime_error("nspv_listtransactions [address [isCC [skipcount]]]\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     if ( params.size() == 0 )
     {
@@ -1095,7 +1095,7 @@ UniValue nspv_spentinfo(const UniValue& params, bool fHelp, const CPubKey& mypk)
     uint256 txid; int32_t vout;
     if ( fHelp || params.size() != 2 )
         throw runtime_error("nspv_spentinfo txid vout\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     txid = Parseuint256((char *)params[0].get_str().c_str());
     vout = atoi((char *)params[1].get_str().c_str());
@@ -1107,7 +1107,7 @@ UniValue nspv_notarizations(const UniValue& params, bool fHelp, const CPubKey& m
     int32_t height;
     if ( fHelp || params.size() != 1 )
         throw runtime_error("nspv_notarizations height\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     height = atoi((char *)params[0].get_str().c_str());
     return(NSPV_notarizations(height));
@@ -1118,7 +1118,7 @@ UniValue nspv_hdrsproof(const UniValue& params, bool fHelp, const CPubKey& mypk)
     int32_t prevheight,nextheight;
     if ( fHelp || params.size() != 2 )
         throw runtime_error("nspv_hdrsproof prevheight nextheight\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     prevheight = atoi((char *)params[0].get_str().c_str());
     nextheight = atoi((char *)params[1].get_str().c_str());
@@ -1130,7 +1130,7 @@ UniValue nspv_txproof(const UniValue& params, bool fHelp, const CPubKey& mypk)
     uint256 txid; int32_t height;
     if ( fHelp || params.size() != 2 )
         throw runtime_error("nspv_txproof txid height\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     txid = Parseuint256((char *)params[0].get_str().c_str());
     height = atoi((char *)params[1].get_str().c_str());
@@ -1142,7 +1142,7 @@ UniValue nspv_spend(const UniValue& params, bool fHelp, const CPubKey& mypk)
     uint64_t satoshis;
     if ( fHelp || params.size() != 2 )
         throw runtime_error("nspv_spend address amount\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     if ( NSPV_address.size() == 0 )
         throw runtime_error("to nspv_send you need an active nspv_login\n");
@@ -1157,7 +1157,7 @@ UniValue nspv_broadcast(const UniValue& params, bool fHelp, const CPubKey& mypk)
 {
     if ( fHelp || params.size() != 1 )
         throw runtime_error("nspv_broadcast hex\n");
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
     return(NSPV_broadcast((char *)params[0].get_str().c_str()));
 }
@@ -1171,7 +1171,7 @@ UniValue nspv_listccmoduleunspent(const UniValue& params, bool fHelp, const CPub
         "if amount is 0 just returns no utxos and available total.\n"
         "funcids is a string of funcid symbols. The first symbol is considered as the creation funcid, so the txid param will be compared to the creation tx id.\n"
         "For the second+ funcids the txid param will be compared to txid in opreturn\n\n" );
-    if (KOMODO_NSPV_FULLNODE)
+    if (VAPORUM_NSPV_FULLNODE)
         throw runtime_error("-nSPV=1 must be set to use nspv\n");
 
     std::string address = params[0].get_str().c_str();

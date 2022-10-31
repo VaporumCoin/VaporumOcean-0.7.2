@@ -52,8 +52,8 @@
 #include <QUrlQuery>
 #endif
 
-const int KOMODO_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
-const QString KOMODO_IPC_PREFIX("vaporum:");
+const int VAPORUM_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
+const QString VAPORUM_IPC_PREFIX("vaporum:");
 
 #ifdef ENABLE_BIP70
 // BIP70 payment protocol messages
@@ -222,7 +222,7 @@ void PaymentServer::ipcParseCommandLine(int argc, char* argv[])
         // network as that would require fetching and parsing the payment request.
         // That means clicking such an URI which contains a testnet payment request
         // will start a mainnet instance and throw a "wrong network" error.
-        if (arg.startsWith(KOMODO_IPC_PREFIX, Qt::CaseInsensitive)) // vaporum: URI
+        if (arg.startsWith(VAPORUM_IPC_PREFIX, Qt::CaseInsensitive)) // vaporum: URI
         {
             savedPaymentRequests.append(arg);
 
@@ -282,7 +282,7 @@ bool PaymentServer::ipcSendCommandLine()
     {
         QLocalSocket* socket = new QLocalSocket();
         socket->connectToServer(ipcServerName(), QIODevice::WriteOnly);
-        if (!socket->waitForConnected(KOMODO_IPC_CONNECT_TIMEOUT))
+        if (!socket->waitForConnected(VAPORUM_IPC_CONNECT_TIMEOUT))
         {
             delete socket;
             socket = nullptr;
@@ -297,7 +297,7 @@ bool PaymentServer::ipcSendCommandLine()
 
         socket->write(block);
         socket->flush();
-        socket->waitForBytesWritten(KOMODO_IPC_CONNECT_TIMEOUT);
+        socket->waitForBytesWritten(VAPORUM_IPC_CONNECT_TIMEOUT);
         socket->disconnectFromServer();
 
         delete socket;
@@ -430,7 +430,7 @@ void PaymentServer::handleURIOrFile(const QString& s)
         return;
     }
 
-    if (s.startsWith(KOMODO_IPC_PREFIX, Qt::CaseInsensitive)) // vaporum: URI
+    if (s.startsWith(VAPORUM_IPC_PREFIX, Qt::CaseInsensitive)) // vaporum: URI
     {
 #if QT_VERSION < 0x050000
         QUrl uri(s);

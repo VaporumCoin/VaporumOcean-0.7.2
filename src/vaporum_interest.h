@@ -16,7 +16,7 @@
 #include <cstdint>
 
 // each era of this many blocks reduces block reward from 3 to 2 to 1
-#define KOMODO_ENDOFERA 7777777
+#define VAPORUM_ENDOFERA 7777777
 
 /****
  * @brief evidently a new way to calculate interest

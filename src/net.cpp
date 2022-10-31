@@ -455,13 +455,13 @@ void CNode::CloseSocketDisconnect()
 }
 
 /* TODO remove
-#ifndef KOMODO_NSPV_FULLNODE
-#define KOMODO_NSPV_FULLNODE (KOMODO_NSPV <= 0)
-#endif // !KOMODO_NSPV_FULLNODE
+#ifndef VAPORUM_NSPV_FULLNODE
+#define VAPORUM_NSPV_FULLNODE (VAPORUM_NSPV <= 0)
+#endif // !VAPORUM_NSPV_FULLNODE
 
-#ifndef KOMODO_NSPV_SUPERLITE
-#define KOMODO_NSPV_SUPERLITE (KOMODO_NSPV > 0)
-#endif // !KOMODO_NSPV_SUPERLITE
+#ifndef VAPORUM_NSPV_SUPERLITE
+#define VAPORUM_NSPV_SUPERLITE (VAPORUM_NSPV > 0)
+#endif // !VAPORUM_NSPV_SUPERLITE
 */
 
 void CNode::PushVersion()
@@ -1978,7 +1978,7 @@ bool StopNode()
         for (int i=0; i<MAX_OUTBOUND_CONNECTIONS; i++)
             semOutbound->post();
 
-    if (KOMODO_NSPV_FULLNODE && fAddressesInitialized)
+    if (VAPORUM_NSPV_FULLNODE && fAddressesInitialized)
     {
         DumpAddresses();
         fAddressesInitialized = false;

@@ -395,7 +395,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         bnTarget = arith_uint256().SetCompact(nbits);
         if ( height > (int32_t)(sizeof(ct)/sizeof(*ct)) && pblock != 0 && tipdiff > 0 )
         {
-            easy.SetCompact(KOMODO_MINDIFF_NBITS & (~3),&fNegative,&fOverflow);
+            easy.SetCompact(VAPORUM_MINDIFF_NBITS & (~3),&fNegative,&fOverflow);
             if ( pblock != 0 )
             {
                 origtarget = bnTarget;
@@ -480,7 +480,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
                 {
                     bnTarget = easy;
                     LogPrint("pow", "cmp.%d mult.%d ht.%d -> easy target\n",mult>1,(int32_t)mult,height);
-                    return(KOMODO_MINDIFF_NBITS & (~3));
+                    return(VAPORUM_MINDIFF_NBITS & (~3));
                 }
                 {
                     int32_t z;
@@ -594,10 +594,10 @@ int32_t vaporum_currentheight();
 void vaporum_index2pubkey33(uint8_t *pubkey33,CBlockIndex *pindex,int32_t height);
 bool vaporum_checkopret(CBlock *pblock, CScript &merkleroot);
 CScript vaporum_makeopret(CBlock *pblock, bool fNew);
-#define KOMODO_ELECTION_GAP 2000
+#define VAPORUM_ELECTION_GAP 2000
 
 int32_t vaporum_eligiblenotary(uint8_t pubkeys[66][33],int32_t *mids,uint32_t blocktimes[66],int32_t *nonzpkeysp,int32_t height);
-/* KOMODO_LOADINGBLOCKS moved from here to vaporum_globals.cpp and made boolean */
+/* VAPORUM_LOADINGBLOCKS moved from here to vaporum_globals.cpp and made boolean */
 
 extern std::string NOTARY_PUBKEY;
 
@@ -660,7 +660,7 @@ bool CheckProofOfWork(const CBlockHeader &blkHeader, uint8_t *pubkey33, int32_t 
             else if ( height >= 80000 && height < 108000 && special2 > 0 )
                 flag = 1;
             else if ( height >= 108000 && special2 > 0 )
-                flag = (height > 1000000 || (height % KOMODO_ELECTION_GAP) > 64 || (height % KOMODO_ELECTION_GAP) == 0);
+                flag = (height > 1000000 || (height % VAPORUM_ELECTION_GAP) > 64 || (height % VAPORUM_ELECTION_GAP) == 0);
             else if ( height == 790833 )
                 flag = 1;
             else if ( special2 < 0 )
@@ -741,7 +741,7 @@ bool CheckProofOfWork(const CBlockHeader &blkHeader, uint8_t *pubkey33, int32_t 
             if ( (flag != 0 || special2 > 0) && special2 != -2 )
             {
                 //LogPrintf("EASY MINING ht.%d\n",height);
-                bnTarget.SetCompact(KOMODO_MINDIFF_NBITS,&fNegative,&fOverflow);
+                bnTarget.SetCompact(VAPORUM_MINDIFF_NBITS,&fNegative,&fOverflow);
             }
         }
     }
@@ -751,12 +751,12 @@ bool CheckProofOfWork(const CBlockHeader &blkHeader, uint8_t *pubkey33, int32_t 
     if ( ASSETCHAINS_STAKED != 0 )
     {
         arith_uint256 bnMaxPoSdiff;
-        bnTarget.SetCompact(KOMODO_MINDIFF_NBITS,&fNegative,&fOverflow);
+        bnTarget.SetCompact(VAPORUM_MINDIFF_NBITS,&fNegative,&fOverflow);
     }
     // Check proof of work matches claimed amount
     if ( UintToArith256(hash = blkHeader.GetHash()) > bnTarget )
     {
-        if ( KOMODO_LOADINGBLOCKS )
+        if ( VAPORUM_LOADINGBLOCKS )
             return true;
 
         if ( !chainName.isKMD() || height > 792000 )

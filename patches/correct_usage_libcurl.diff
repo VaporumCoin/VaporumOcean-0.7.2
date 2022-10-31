@@ -76,7 +76,7 @@ index 30d8fcb..05d8a94 100644
 --- a/src/Makefile.qt.include
 +++ b/src/Makefile.qt.include
 @@ -446,39 +446,7 @@ if TARGET_WINDOWS
-   qt_vaporum_qt_SOURCES += $(KOMODO_RC)
+   qt_vaporum_qt_SOURCES += $(VAPORUM_RC)
  endif
  
 -# libbitcoin_server.a(libbitcoin_server_a-rpcserver.o): In function `__static_initialization_and_destruction_0(int, int)':

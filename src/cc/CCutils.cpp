@@ -172,7 +172,7 @@ bool CheckTxFee(const CTransaction &tx, uint64_t txfee, uint32_t height, uint64_
 
 uint32_t GetLatestTimestamp(int32_t height)
 {
-    if ( KOMODO_NSPV_SUPERLITE ) return ((uint32_t)NSPV_blocktime(height));
+    if ( VAPORUM_NSPV_SUPERLITE ) return ((uint32_t)NSPV_blocktime(height));
     return(vaporum_heightstamp(height));
 }
 
@@ -448,7 +448,7 @@ std::vector<uint8_t> Mypubkey()
 bool Myprivkey(uint8_t myprivkey[])
 {
     char coinaddr[64],checkaddr[64]; std::string strAddress; char *dest; int32_t i,n; CBitcoinAddress address; CKeyID keyID; CKey vchSecret; uint8_t buf33[33];
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         extern uint32_t NSPV_logintime;
         if ( NSPV_logintime == 0 || time(NULL) > NSPV_logintime+NSPV_AUTOLOGOUT )
@@ -587,7 +587,7 @@ int32_t NSPV_coinaddr_inmempool(char const *logcategory,char *coinaddr,uint8_t C
 int32_t myIs_coinaddr_inmempoolvout(char const *logcategory,char *coinaddr)
 {
     int32_t i,n; char destaddr[64];
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
         return(NSPV_coinaddr_inmempool(logcategory,coinaddr,1));
     BOOST_FOREACH(const CTxMemPoolEntry &e,mempool.mapTx)
     {
@@ -616,7 +616,7 @@ int32_t myGet_mempool_txs(std::vector<CTransaction> &txs,uint8_t evalcode,uint8_
 {
     int i=0;
 
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         CTransaction tx; uint256 hashBlock;
 
@@ -664,7 +664,7 @@ uint256 BitcoinGetProofMerkleRoot(const std::vector<uint8_t> &proofData, std::ve
 extern struct NSPV_inforesp NSPV_inforesult;
 int32_t vaporum_get_current_height()
 {
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         return (NSPV_inforesult.height);
     }
@@ -678,9 +678,9 @@ bool vaporum_txnotarizedconfirmed(uint256 txid)
     CTransaction tx;
     uint256 hashBlock;
     CBlockIndex *pindex;    
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN],dest[KOMODO_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN],dest[VAPORUM_ASSETCHAIN_MAXLEN]; struct vaporum_state *sp;
 
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         if ( NSPV_myGetTransaction(txid,tx,hashBlock,txheight,currentheight) == 0 )
         {
@@ -818,10 +818,10 @@ int64_t TotalPubkeyCCInputs(const CTransaction &tx, const CPubKey &pubkey)
 
 bool ProcessCC(struct CCcontract_info *cp,Eval* eval, std::vector<uint8_t> paramsNull,const CTransaction &ctx, unsigned int nIn)
 {
-    if ( KOMODO_CONNECTING < 0 ) // always comes back with > 0 for final confirmation
+    if ( VAPORUM_CONNECTING < 0 ) // always comes back with > 0 for final confirmation
         return true;
 
-    if ( ASSETCHAINS_CC == 0 || (KOMODO_CONNECTING & ~(1<<30)) < KOMODO_CCACTIVATE )
+    if ( ASSETCHAINS_CC == 0 || (VAPORUM_CONNECTING & ~(1<<30)) < VAPORUM_CCACTIVATE )
         return eval->Invalid("CC are disabled or not active yet");
 
     if (cp->validate == NULL)
@@ -853,14 +853,14 @@ bool CClib_Dispatch(const CC *cond,Eval *eval,std::vector<uint8_t> paramsNull,co
         return eval->Invalid("-ac_cclib name mismatches myname");
     }
 
-    if ( KOMODO_CONNECTING < 0 ) // always comes back with > 0 for final confirmation
+    if ( VAPORUM_CONNECTING < 0 ) // always comes back with > 0 for final confirmation
         return true;
 
     // chain height calc and check
-    int32_t height = KOMODO_CONNECTING;
-    if ( ASSETCHAINS_CC == 0 || (height & ~(1<<30)) < KOMODO_CCACTIVATE )
+    int32_t height = VAPORUM_CONNECTING;
+    if ( ASSETCHAINS_CC == 0 || (height & ~(1<<30)) < VAPORUM_CCACTIVATE )
         return eval->Invalid("CC are disabled or not active yet");
-    if ( (KOMODO_CONNECTING & (1<<30)) != 0 )
+    if ( (VAPORUM_CONNECTING & (1<<30)) != 0 )
     {
         height &= ((1<<30) - 1);
     }

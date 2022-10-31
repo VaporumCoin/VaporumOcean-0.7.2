@@ -601,7 +601,7 @@ CAmount CCoinsViewCache::GetValueIn(int32_t nHeight,int64_t &interestp,const CTr
     {
         value = GetOutputFor(tx.vin[i]).nValue;
         nResult += value;
-#ifdef KOMODO_ENABLE_INTEREST
+#ifdef VAPORUM_ENABLE_INTEREST
         if ( chainName.isKMD() && nHeight >= 60000 )
         {
             if ( value >= 10*COIN )

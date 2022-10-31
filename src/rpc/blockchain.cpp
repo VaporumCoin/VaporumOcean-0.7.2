@@ -57,7 +57,7 @@
 using namespace std;
 
 // TODO: remove
-//extern int32_t KOMODO_INSYNC;
+//extern int32_t VAPORUM_INSYNC;
 //extern void TxToJSON(const CTransaction& tx, const uint256 hashBlock, UniValue& entry);
 //void ScriptPubKeyToJSON(const CScript& scriptPubKey, UniValue& out, bool fIncludeHex);
 //int32_t vaporum_notarized_height(int32_t *prevMoMheightp,uint256 *hashp,uint256 *txidp);
@@ -411,7 +411,7 @@ bool NSPV_inmempool(uint256 txid);
 bool myIsutxo_spentinmempool(uint256 &spenttxid,int32_t &spentvini,uint256 txid,int32_t vout)
 {
     int32_t vini = 0;
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
         return(NSPV_spentinmempool(spenttxid,spentvini,txid,vout));
     BOOST_FOREACH(const CTxMemPoolEntry &e,mempool.mapTx)
     {
@@ -435,7 +435,7 @@ bool myIsutxo_spentinmempool(uint256 &spenttxid,int32_t &spentvini,uint256 txid,
 
 bool mytxid_inmempool(uint256 txid)
 {
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         
     }
@@ -990,7 +990,7 @@ UniValue kvsearch(const UniValue& params, bool fHelp, const CPubKey& mypk)
                 if ( memcmp(&zeroes,&refpubkey,sizeof(refpubkey)) != 0 )
                     ret.push_back(Pair("owner",refpubkey.GetHex()));
                 ret.push_back(Pair("height",height));
-                duration = ((flags >> 2) + 1) * KOMODO_KVDURATION;
+                duration = ((flags >> 2) + 1) * VAPORUM_KVDURATION;
                 ret.push_back(Pair("expiration", (int64_t)(height+duration)));
                 ret.push_back(Pair("flags",(int64_t)flags));
                 ret.push_back(Pair("value",val));
@@ -1346,13 +1346,13 @@ UniValue getblockchaininfo(const UniValue& params, bool fHelp, const CPubKey& my
     if ( chainName.isKMD() ) {
         progress = Checkpoints::GuessVerificationProgress(Params().Checkpoints(), chainActive.Tip());
     } else {
-        int32_t longestchain = KOMODO_LONGESTCHAIN;
+        int32_t longestchain = VAPORUM_LONGESTCHAIN;
 	    progress = (longestchain > 0 ) ? (double) chainActive.Height() / longestchain : 1.0;
     }
     UniValue obj(UniValue::VOBJ);
     obj.push_back(Pair("chain",                 Params().NetworkIDString()));
     obj.push_back(Pair("blocks",                (int)chainActive.Height()));
-    obj.push_back(Pair("synced",                KOMODO_INSYNC!=0));
+    obj.push_back(Pair("synced",                VAPORUM_INSYNC!=0));
     obj.push_back(Pair("headers",               pindexBestHeader ? pindexBestHeader->nHeight : -1));
     obj.push_back(Pair("bestblockhash",         chainActive.Tip()->GetBlockHash().GetHex()));
     obj.push_back(Pair("difficulty",            (double)GetNetworkDifficulty()));

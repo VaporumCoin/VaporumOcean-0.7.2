@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_KOMODOAMOUNTFIELD_H
-#define KOMODO_QT_KOMODOAMOUNTFIELD_H
+#ifndef VAPORUM_QT_VAPORUMAMOUNTFIELD_H
+#define VAPORUM_QT_VAPORUMAMOUNTFIELD_H
 
 #include "amount.h"
 
@@ -72,4 +72,4 @@ private Q_SLOTS:
 
 };
 
-#endif // KOMODO_QT_KOMODOAMOUNTFIELD_H
+#endif // VAPORUM_QT_VAPORUMAMOUNTFIELD_H

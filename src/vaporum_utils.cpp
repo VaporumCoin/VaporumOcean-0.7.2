@@ -551,7 +551,7 @@ void vaporum_configfile(const char *symbol,uint16_t rpcport)
 
 uint16_t vaporum_userpass(char *userpass,const char *symbol)
 {
-    FILE *fp; uint16_t port = 0; char fname[512],username[512],password[512],confname[KOMODO_ASSETCHAIN_MAXLEN];
+    FILE *fp; uint16_t port = 0; char fname[512],username[512],password[512],confname[VAPORUM_ASSETCHAIN_MAXLEN];
     userpass[0] = 0;
     if ( strcmp("KMD",symbol) == 0 )
     {
@@ -811,15 +811,15 @@ uint64_t vaporum_current_supply(uint32_t nHeight)
             }
         }
     }    
-    if ( KOMODO_BIT63SET(cur_money) != 0 )
-        return(KOMODO_MAXNVALUE);
+    if ( VAPORUM_BIT63SET(cur_money) != 0 )
+        return(VAPORUM_MAXNVALUE);
     if ( ASSETCHAINS_COMMISSION != 0 )
     {
         uint64_t newval = (cur_money + (cur_money/COIN * ASSETCHAINS_COMMISSION));
-        if ( KOMODO_BIT63SET(newval) != 0 )
-            return(KOMODO_MAXNVALUE);
+        if ( VAPORUM_BIT63SET(newval) != 0 )
+            return(VAPORUM_MAXNVALUE);
         else if ( newval < cur_money ) // check for underflow
-            return(KOMODO_MAXNVALUE);
+            return(VAPORUM_MAXNVALUE);
         return(newval);
     }
     //LogPrintf("cur_money %.8f\n",(double)cur_money/COIN);
@@ -981,7 +981,7 @@ void get_userpass_and_port(const boost::filesystem::path& path, const std::strin
 /****
  * @brief set ports and usernames/passwords from command line and/or config files
  * @note modifies ASSETCHAINS_P2PPORT, ASSETCHAINS_RPCPORT, KMDUSERPASS, BTCUSERPASS, DESTPORT
- * @note IS_KOMODO_NOTARY should already be set
+ * @note IS_VAPORUM_NOTARY should already be set
  * @param ltc_config_filename configuration file for ltc (via -notary command line parameter)
  */
 void set_kmd_user_password_port(const std::string& ltc_config_filename)
@@ -1000,7 +1000,7 @@ void set_kmd_user_password_port(const std::string& ltc_config_filename)
     get_userpass_and_port(datadir_path, filename, userpass, ignore);
     if (!userpass.empty())
         strncpy(KMDUSERPASS, userpass.c_str(), 8705);
-    if (IS_KOMODO_NOTARY)
+    if (IS_VAPORUM_NOTARY)
     {
         auto approot_path = GetAppDir();  // go to app root dir
         get_userpass_and_port(approot_path, ltc_config_filename, userpass, DEST_PORT);
@@ -1018,29 +1018,29 @@ void vaporum_args(char *argv0)
     int32_t extralen = 0; 
 
     const std::string ntz_dest_path = GetArg("-notary", "");
-    IS_KOMODO_NOTARY = ntz_dest_path == "" ? 0 : 1;
+    IS_VAPORUM_NOTARY = ntz_dest_path == "" ? 0 : 1;
 
 
     STAKED_NOTARY_ID = GetArg("-stakednotary", -1);
-    KOMODO_NSPV = GetArg("-nSPV",0);
+    VAPORUM_NSPV = GetArg("-nSPV",0);
     memset(disablebits,0,sizeof(disablebits)); // everything enabled
     if ( GetBoolArg("-gen", false) != 0 )
     {
-        KOMODO_MININGTHREADS = GetArg("-genproclimit",-1);
+        VAPORUM_MININGTHREADS = GetArg("-genproclimit",-1);
     }
     IS_MODE_EXCHANGEWALLET = GetBoolArg("-exchange", false);
     if ( IS_MODE_EXCHANGEWALLET )
         LogPrintf("IS_MODE_EXCHANGEWALLET mode active\n");
     DONATION_PUBKEY = GetArg("-donation", "");
     NOTARY_PUBKEY = GetArg("-pubkey", "");
-    IS_KOMODO_DEALERNODE = GetArg("-dealer",0);
-    IS_KOMODO_TESTNODE = GetArg("-testnode",0);
+    IS_VAPORUM_DEALERNODE = GetArg("-dealer",0);
+    IS_VAPORUM_TESTNODE = GetArg("-testnode",0);
     ASSETCHAINS_STAKED_SPLIT_PERCENTAGE = GetArg("-splitperc",0);
     if ( strlen(NOTARY_PUBKEY.c_str()) == 66 )
     {
         decode_hex(NOTARY_PUBKEY33,33,(char *)NOTARY_PUBKEY.c_str());
         USE_EXTERNAL_PUBKEY = 1;
-        if ( !IS_KOMODO_NOTARY )
+        if ( !IS_VAPORUM_NOTARY )
         {
             // We dont have any chain data yet, so use system clock to guess. 
             // I think on season change should reccomend notaries to use -notary to avoid needing this. 
@@ -1049,9 +1049,9 @@ void vaporum_args(char *argv0)
             {
                 if ( strcmp(NOTARY_PUBKEY.c_str(),notaries_elected[kmd_season-1][i][1]) == 0 )
                 {
-                    IS_KOMODO_NOTARY = true;
-                    KOMODO_MININGTHREADS = 1;
-                    mapArgs ["-genproclimit"] = itostr(KOMODO_MININGTHREADS);
+                    IS_VAPORUM_NOTARY = true;
+                    VAPORUM_MININGTHREADS = 1;
+                    mapArgs ["-genproclimit"] = itostr(VAPORUM_MININGTHREADS);
                     STAKED_NOTARY_ID = -1;
                     LogPrintf("running as notary.%d %s\n",i,notaries_elected[kmd_season-1][i][0]);
                     break;
@@ -1059,7 +1059,7 @@ void vaporum_args(char *argv0)
             }
         }
     }
-    if ( STAKED_NOTARY_ID != -1 && IS_KOMODO_NOTARY == true ) {
+    if ( STAKED_NOTARY_ID != -1 && IS_VAPORUM_NOTARY == true ) {
         LogPrintf( "Cannot be STAKED and KMD notary at the same time!\n");
         StartShutdown();
     }
@@ -1093,15 +1093,15 @@ void vaporum_args(char *argv0)
         }
     }
     chainName = assetchain(name);
-    KOMODO_STOPAT = GetArg("-stopat",0);
+    VAPORUM_STOPAT = GetArg("-stopat",0);
     MAX_REORG_LENGTH = GetArg("-maxreorg",MAX_REORG_LENGTH);
     WITNESS_CACHE_SIZE = MAX_REORG_LENGTH+10;
     ASSETCHAINS_CC = GetArg("-ac_cc",0);
-    KOMODO_CCACTIVATE = GetArg("-ac_ccactivate",0);
+    VAPORUM_CCACTIVATE = GetArg("-ac_ccactivate",0);
     ASSETCHAINS_BLOCKTIME = GetArg("-ac_blocktime",60);
     ASSETCHAINS_PUBLIC = GetArg("-ac_public",0);
     ASSETCHAINS_PRIVATE = GetArg("-ac_private",0);
-    KOMODO_SNAPSHOT_INTERVAL = GetArg("-ac_snapshot",0);
+    VAPORUM_SNAPSHOT_INTERVAL = GetArg("-ac_snapshot",0);
     Split(GetArg("-ac_nk",""), sizeof(ASSETCHAINS_NK)/sizeof(*ASSETCHAINS_NK), ASSETCHAINS_NK, 0);
     
     // -ac_ccactivateht=evalcode,height,evalcode,height,evalcode,height....
@@ -1128,11 +1128,11 @@ void vaporum_args(char *argv0)
         i++;
     }
     
-    if ( (KOMODO_REWIND= GetArg("-rewind",0)) != 0 )
+    if ( (VAPORUM_REWIND= GetArg("-rewind",0)) != 0 )
     {
-        LogPrintf("KOMODO_REWIND %d\n",KOMODO_REWIND);
+        LogPrintf("VAPORUM_REWIND %d\n",VAPORUM_REWIND);
     }
-    KOMODO_EARLYTXID = Parseuint256(GetArg("-earlytxid","0").c_str());    
+    VAPORUM_EARLYTXID = Parseuint256(GetArg("-earlytxid","0").c_str());    
     ASSETCHAINS_EARLYTXIDCONTRACT = GetArg("-ac_earlytxidcontract",0);
 
     if ( !chainName.isKMD() )
@@ -1393,7 +1393,7 @@ void vaporum_args(char *argv0)
                 || ASSETCHAINS_BLOCKTIME != 60 
                 || Mineropret.size() != 0 
                 || (ASSETCHAINS_NK[0] != 0 && ASSETCHAINS_NK[1] != 0) 
-                || KOMODO_SNAPSHOT_INTERVAL != 0 
+                || VAPORUM_SNAPSHOT_INTERVAL != 0 
                 || ASSETCHAINS_EARLYTXIDCONTRACT != 0 
                 || ASSETCHAINS_CBMATURITY != 0 
                 || ASSETCHAINS_ADAPTIVEPOW != 0 )
@@ -1501,9 +1501,9 @@ void vaporum_args(char *argv0)
                 extralen += iguana_rwnum(1,&extraptr[extralen],sizeof(ASSETCHAINS_NK[0]),(void *)&ASSETCHAINS_NK[0]);
                 extralen += iguana_rwnum(1,&extraptr[extralen],sizeof(ASSETCHAINS_NK[1]),(void *)&ASSETCHAINS_NK[1]);
             }
-            if ( KOMODO_SNAPSHOT_INTERVAL != 0 )
+            if ( VAPORUM_SNAPSHOT_INTERVAL != 0 )
             {
-                extralen += iguana_rwnum(1,&extraptr[extralen],sizeof(KOMODO_SNAPSHOT_INTERVAL),(void *)&KOMODO_SNAPSHOT_INTERVAL);
+                extralen += iguana_rwnum(1,&extraptr[extralen],sizeof(VAPORUM_SNAPSHOT_INTERVAL),(void *)&VAPORUM_SNAPSHOT_INTERVAL);
             }
             if ( ASSETCHAINS_EARLYTXIDCONTRACT != 0 )
             {
@@ -1528,10 +1528,10 @@ void vaporum_args(char *argv0)
             LogPrintf("baseid.%d MAX_MONEY.%s %.8f\n",baseid,chainName.symbol().c_str(),(double)MAX_MONEY/SATOSHIDEN);
         }
 
-        if ( ASSETCHAINS_CC >= KOMODO_FIRSTFUNGIBLEID && MAX_MONEY < 1000000LL*SATOSHIDEN )
+        if ( ASSETCHAINS_CC >= VAPORUM_FIRSTFUNGIBLEID && MAX_MONEY < 1000000LL*SATOSHIDEN )
             MAX_MONEY = 1000000LL*SATOSHIDEN;
-        if ( KOMODO_BIT63SET(MAX_MONEY) != 0 )
-            MAX_MONEY = KOMODO_MAXNVALUE;
+        if ( VAPORUM_BIT63SET(MAX_MONEY) != 0 )
+            MAX_MONEY = VAPORUM_MAXNVALUE;
         LogPrintf("MAX_MONEY %llu %.8f\n",(long long)MAX_MONEY,(double)MAX_MONEY/SATOSHIDEN);
         uint16_t tmpport = vaporum_port(chainName.symbol().c_str(),ASSETCHAINS_SUPPLY,&ASSETCHAINS_MAGIC,extraptr,extralen);
         if ( GetArg("-port",0) != 0 )
@@ -1597,10 +1597,10 @@ void vaporum_args(char *argv0)
 #endif
         if ( ASSETCHAINS_CC < 2 )
         {
-            if ( KOMODO_CCACTIVATE != 0 )
+            if ( VAPORUM_CCACTIVATE != 0 )
             {
                 ASSETCHAINS_CC = 2;
-                LogPrintf("smart utxo CC contracts will activate at height.%d\n",KOMODO_CCACTIVATE);
+                LogPrintf("smart utxo CC contracts will activate at height.%d\n",VAPORUM_CCACTIVATE);
             }
             else if ( ccEnablesHeight[0] != 0 )
             {
@@ -1614,7 +1614,7 @@ void vaporum_args(char *argv0)
         // -ac_name not passed, we are on the KMD chain
         set_kmd_user_password_port(ntz_dest_path);
     }
-    int32_t dpowconfs = KOMODO_DPOWCONFS;
+    int32_t dpowconfs = VAPORUM_DPOWCONFS;
     if ( !chainName.isKMD() )
     {
         BITCOIND_RPCPORT = GetArg("-rpcport", ASSETCHAINS_RPCPORT);
@@ -1694,14 +1694,14 @@ void vaporum_args(char *argv0)
     } 
     else 
         BITCOIND_RPCPORT = GetArg("-rpcport", BaseParams().RPCPort());
-    KOMODO_DPOWCONFS = GetArg("-dpowconfs",dpowconfs);
+    VAPORUM_DPOWCONFS = GetArg("-dpowconfs",dpowconfs);
     if ( chainName.isKMD() 
             || chainName.isSymbol("SUPERNET") 
             || chainName.isSymbol("DEX") 
             || chainName.isSymbol("COQUI") 
             || chainName.isSymbol("PIRATE") 
             || chainName.isSymbol("KMDICE") )
-        KOMODO_EXTRASATOSHI = 1;
+        VAPORUM_EXTRASATOSHI = 1;
 }
 
 void vaporum_nameset(char *symbol,char *dest,const char *source)
@@ -1727,10 +1727,10 @@ vaporum_state *vaporum_stateptrget(char *base)
 {
     // "KMD" case
     if ( base == 0 || base[0] == 0 || strcmp(base,(char *)"KMD") == 0 )
-        return &KOMODO_STATES[1];
+        return &VAPORUM_STATES[1];
 
     // evidently this asset chain
-    return &KOMODO_STATES[0];
+    return &VAPORUM_STATES[0];
 }
 
 /****

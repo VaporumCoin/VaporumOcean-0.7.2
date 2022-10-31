@@ -342,9 +342,9 @@ void VaporumCore::shutdown()
 
         int32_t i,height; CBlockIndex *pindex; bool fShutdown = ShutdownRequested(); const uint256 zeroid;
 
-        if (vaporum_currentheight()>KOMODO_EARLYTXID_HEIGHT && KOMODO_EARLYTXID!=zeroid && ((height=tx_height(KOMODO_EARLYTXID))==0 || height>KOMODO_EARLYTXID_HEIGHT))
+        if (vaporum_currentheight()>VAPORUM_EARLYTXID_HEIGHT && VAPORUM_EARLYTXID!=zeroid && ((height=tx_height(VAPORUM_EARLYTXID))==0 || height>VAPORUM_EARLYTXID_HEIGHT))
         {
-            LogPrintf("error: earlytx must be before block height %d or tx does not exist\n",KOMODO_EARLYTXID_HEIGHT);
+            LogPrintf("error: earlytx must be before block height %d or tx does not exist\n",VAPORUM_EARLYTXID_HEIGHT);
             StartShutdown();
         }
 
@@ -353,7 +353,7 @@ void VaporumCore::shutdown()
             /* TODO: move to ThreadUpdateVaporumInternals */
             if ( chainName.isKMD() )
             {
-                if ( KOMODO_NSPV_FULLNODE ) {
+                if ( VAPORUM_NSPV_FULLNODE ) {
                     vaporum_update_interest();
                     vaporum_longestchain();
                 }
@@ -627,7 +627,7 @@ WId VaporumApplication::getMainWinId() const
     return window->winId();
 }
 
-#ifndef KOMODO_QT_TEST
+#ifndef VAPORUM_QT_TEST
 int main(int argc, char *argv[])
 {
     SetupEnvironment();
@@ -730,7 +730,7 @@ int main(int argc, char *argv[])
     }
 
     try {
-//        ReadConfigFile(GetArg("-conf", KOMODO_CONF_FILENAME));
+//        ReadConfigFile(GetArg("-conf", VAPORUM_CONF_FILENAME));
         ReadConfigFile(mapArgs, mapMultiArgs);
     } catch (const std::exception& e) {
         QMessageBox::critical(0, QObject::tr(PACKAGE_NAME),
@@ -839,4 +839,4 @@ int main(int argc, char *argv[])
     qDebug() << __func__ << ": Final";
     return rv;
 }
-#endif // KOMODO_QT_TEST
+#endif // VAPORUM_QT_TEST

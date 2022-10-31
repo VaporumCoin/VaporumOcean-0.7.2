@@ -3,8 +3,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_ADDRDB_H
-#define KOMODO_ADDRDB_H
+#ifndef VAPORUM_ADDRDB_H
+#define VAPORUM_ADDRDB_H
 
 #include "fs.h"
 #include "serialize.h"
@@ -87,4 +87,4 @@ public:
     bool Read(banmap_t& banSet);
 };
 
-#endif // KOMODO_ADDRDB_H
+#endif // VAPORUM_ADDRDB_H

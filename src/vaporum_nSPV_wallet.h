@@ -14,8 +14,8 @@
  *                                                                            *
  ******************************************************************************/
 
-#ifndef KOMODO_NSPVWALLET_H
-#define KOMODO_NSPVWALLET_H
+#ifndef VAPORUM_NSPVWALLET_H
+#define VAPORUM_NSPVWALLET_H
 
 #include "vaporum_interest.h"
 
@@ -250,7 +250,7 @@ bool NSPV_SignTx(CMutableTransaction &mtx,int32_t vini,int64_t utxovalue,const C
         return false;
     }
     keystore.AddKey(NSPV_key);
-    if ( nTime != 0 && nTime < KOMODO_SAPLING_ACTIVATION )
+    if ( nTime != 0 && nTime < VAPORUM_SAPLING_ACTIVATION )
     {
         LogPrintf("use legacy sig validation\n");
         branchid = 0;
@@ -542,4 +542,4 @@ void NSPV_CCtxids(std::vector<uint256> &txids,char *coinaddr,bool ccflag, uint8_
     for(int i=0;i<NSPV_mempoolresult.numtxids;i++) txids.push_back(NSPV_mempoolresult.txids[i]);
 }
 
-#endif // KOMODO_NSPVWALLET_H
+#endif // VAPORUM_NSPVWALLET_H

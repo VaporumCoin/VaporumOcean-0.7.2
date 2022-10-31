@@ -676,7 +676,7 @@ bool vaporum_dailysnapshot(int32_t height)
     // However, the DB can reorg the last notarization. By using 2 deep, we know 100% that the previous notarization cannot be 
     // reorged by online nodes, and as such will always be notarizing the same height. May need to check heights on scan back 
     // to make sure they are confirmed in correct order.
-    if ( (extraoffset= height % KOMODO_SNAPSHOT_INTERVAL) != 0 )
+    if ( (extraoffset= height % VAPORUM_SNAPSHOT_INTERVAL) != 0 )
     {
         // we are on chain init, and need to scan all the way back to the correct height, other wise our node will have a diffrent snapshot to online nodes.
         // use the notarizationsDB to scan back from the consesnus height to get the offset we need.
@@ -1564,7 +1564,7 @@ bool CheckTransactionWithoutProofVerification(uint32_t tiptime,const CTransactio
             return state.DoS(100, error("CheckTransaction(): this is a public chain, no privacy allowed"),
                              REJECT_INVALID, "bad-txns-acpublic-chain");
         }
-        if ( tiptime >= KOMODO_SAPLING_DEADLINE )
+        if ( tiptime >= VAPORUM_SAPLING_DEADLINE )
         {
             return state.DoS(100, error("CheckTransaction(): no more sprout after deadline"),
                              REJECT_INVALID, "bad-txns-sprout-expired");
@@ -1957,7 +1957,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
         CAmount nValueOut = tx.GetValueOut();
         CAmount nFees = nValueIn-nValueOut;
         double dPriority = view.GetPriority(tx, chainActive.Height());
-        if ( nValueOut > 777777*COIN && KOMODO_VALUETOOBIG(nValueOut - 777777*COIN) != 0 ) // some room for blockreward and txfees
+        if ( nValueOut > 777777*COIN && VAPORUM_VALUETOOBIG(nValueOut - 777777*COIN) != 0 ) // some room for blockreward and txfees
             return state.DoS(100, error("AcceptToMemoryPool: GetValueOut too big"),REJECT_INVALID,"tx valueout is too big");
   
         // Keep track of transactions that spend a coinbase, which we re-scan
@@ -2057,20 +2057,20 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransa
         // invalid blocks, however allowing such transactions into the mempool
         // can be exploited as a DoS attack.
         // XXX: is this neccesary for CryptoConditions?
-        if ( KOMODO_CONNECTING <= 0 && chainActive.Tip() != 0 )
+        if ( VAPORUM_CONNECTING <= 0 && chainActive.Tip() != 0 )
         {
             flag = 1;
-            KOMODO_CONNECTING = (1<<30) + (int32_t)chainActive.Tip()->nHeight + 1;
+            VAPORUM_CONNECTING = (1<<30) + (int32_t)chainActive.Tip()->nHeight + 1;
         }
 
         if (!ContextualCheckInputs(tx, state, view, true, MANDATORY_SCRIPT_VERIFY_FLAGS, true, txdata, Params().GetConsensus(), consensusBranchId))
         {
             if ( flag != 0 )
-                KOMODO_CONNECTING = -1;
+                VAPORUM_CONNECTING = -1;
             return error("AcceptToMemoryPool: BUG! PLEASE REPORT THIS! ConnectInputs failed against MANDATORY but not STANDARD flags %s", hash.ToString());
         }
         if ( flag != 0 )
-            KOMODO_CONNECTING = -1;
+            VAPORUM_CONNECTING = -1;
 
         {
             LOCK(pool.cs);
@@ -2211,7 +2211,7 @@ bool myAddtomempool(const CTransaction &tx, CValidationState *pstate, bool fSkip
 bool myGetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock)
 {
     memset(&hashBlock,0,sizeof(hashBlock));
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         int64_t rewardsum = 0; 
         int32_t retval,txheight,currentheight,height=0,vout = 0;
@@ -2268,7 +2268,7 @@ bool myGetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlo
 bool NSPV_myGetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock, int32_t &txheight, int32_t &currentheight)
 {
     memset(&hashBlock,0,sizeof(hashBlock));
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         int64_t rewardsum = 0; int32_t i,retval,height=0,vout = 0;
         for (i=0; i<NSPV_U.U.numutxos; i++)
@@ -2436,9 +2436,9 @@ CAmount GetBlockSubsidy(int nHeight, const Consensus::Params& consensusParams)
     {
         if ( nHeight == 1 )
             return(100000000 * COIN); // ICO allocation
-        else if ( nHeight < KOMODO_ENDOFERA )
+        else if ( nHeight < VAPORUM_ENDOFERA )
             return(3 * COIN);
-        else if ( nHeight < 2*KOMODO_ENDOFERA )
+        else if ( nHeight < 2*VAPORUM_ENDOFERA )
             return(2 * COIN);
         else return(COIN);
     }
@@ -2512,7 +2512,7 @@ bool IsInitialBlockDownload()
     }
     bool state = ((chainActive.Height() < ptr->nHeight - 24*60) ||
              ptr->GetBlockTime() < (GetTime() - nMaxTipAge));
-    if ( KOMODO_INSYNC != 0 )
+    if ( VAPORUM_INSYNC != 0 )
         state = false;
     if (!state)
     {
@@ -2804,7 +2804,7 @@ namespace Consensus {
 
             // Check for negative or overflow input values
             nValueIn += coins->vout[prevout.n].nValue;
-#ifdef KOMODO_ENABLE_INTEREST
+#ifdef VAPORUM_ENABLE_INTEREST
             if ( chainName.isKMD() && nSpendHeight > 60000 )
             {
                 if ( coins->vout[prevout.n].nValue >= 10*COIN )
@@ -3356,9 +3356,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 {
     CDiskBlockPos blockPos;
     const CChainParams& chainparams = Params();
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
         return(true);
-    if ( KOMODO_STOPAT != 0 && pindex->nHeight > KOMODO_STOPAT )
+    if ( VAPORUM_STOPAT != 0 && pindex->nHeight > VAPORUM_STOPAT )
         return(false);
     //LogPrintf("connectblock ht.%d\n",(int32_t)pindex->nHeight);
     AssertLockHeld(cs_main);
@@ -3463,7 +3463,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     }
 
     bool fScriptChecks = (!fCheckpointsEnabled || pindex->nHeight >= Checkpoints::GetTotalBlocksEstimate(chainparams.Checkpoints()));
-    //if ( KOMODO_TESTNET_EXPIRATION != 0 && pindex->nHeight > KOMODO_TESTNET_EXPIRATION ) // "testnet"
+    //if ( VAPORUM_TESTNET_EXPIRATION != 0 && pindex->nHeight > VAPORUM_TESTNET_EXPIRATION ) // "testnet"
     //    return(false);
     // Do not allow blocks that contain transactions which 'overwrite' older transactions,
     // unless those are already completely spent.
@@ -3602,7 +3602,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         txdata.emplace_back(tx);
 
         valueout = tx.GetValueOut();
-        if ( KOMODO_VALUETOOBIG(valueout) != 0 )
+        if ( VAPORUM_VALUETOOBIG(valueout) != 0 )
         {
             LogPrintf("valueout %.8f too big\n",(double)valueout/COIN);
             return state.DoS(100, error("ConnectBlock(): GetValueOut too big"),REJECT_INVALID,"tx valueout is too big");
@@ -3690,7 +3690,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     LogPrint("bench", "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs]\n", (unsigned)block.vtx.size(), 0.001 * (nTime1 - nTimeStart), 0.001 * (nTime1 - nTimeStart) / block.vtx.size(), nInputs <= 1 ? 0 : 0.001 * (nTime1 - nTimeStart) / (nInputs-1), nTimeConnect * 0.000001);
 
     blockReward += nFees + sum;
-    if ( chainName.isKMD() && pindex->nHeight >= KOMODO_NOTARIES_HEIGHT2)
+    if ( chainName.isKMD() && pindex->nHeight >= VAPORUM_NOTARIES_HEIGHT2)
         blockReward -= sum;
 
     if ( ASSETCHAINS_COMMISSION != 0 || ASSETCHAINS_FOUNDERS_REWARD != 0 ) //ASSETCHAINS_OVERRIDE_PUBKEY33[0] != 0 &&
@@ -3709,9 +3709,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         return state.DoS(100, error("ConnectBlock(): coinbase for block 1 pays wrong amount (actual=%d vs correct=%d)", block.vtx[0].GetValueOut(), blockReward),
                             REJECT_INVALID, "bad-cb-amount");
     }
-    if ( block.vtx[0].GetValueOut() > blockReward+KOMODO_EXTRASATOSHI )
+    if ( block.vtx[0].GetValueOut() > blockReward+VAPORUM_EXTRASATOSHI )
     {
-        if ( !chainName.isKMD() || pindex->nHeight >= KOMODO_NOTARIES_HEIGHT1 || block.vtx[0].vout[0].nValue > blockReward )
+        if ( !chainName.isKMD() || pindex->nHeight >= VAPORUM_NOTARIES_HEIGHT1 || block.vtx[0].vout[0].nValue > blockReward )
         {
             //LogPrintf( "coinbase pays too much\n");
             //sleepflag = true;
@@ -3719,7 +3719,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                              error("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)",
                                    block.vtx[0].GetValueOut(), blockReward),
                              REJECT_INVALID, "bad-cb-amount");
-        } else if ( IS_KOMODO_NOTARY )
+        } else if ( IS_VAPORUM_NOTARY )
             LogPrintf("allow nHeight.%d coinbase %.8f vs %.8f interest %.8f\n",(int32_t)pindex->nHeight,dstr(block.vtx[0].GetValueOut()),dstr(blockReward),dstr(sum));
     }
     if (!control.Wait())
@@ -3942,7 +3942,7 @@ bool static FlushStateToDisk(CValidationState &state, FlushStateMode mode) {
 
 void FlushStateToDisk() {
     CValidationState state;
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
         FlushStateToDisk(state, FLUSH_STATE_ALWAYS);
 }
 
@@ -4100,7 +4100,7 @@ bool static DisconnectTip(CValidationState &state, bool fBare = false) {
         {
 #ifdef ENABLE_WALLET
              // new staking tx cannot be accepted to mempool and expires in 1 block, so no need for this! :D
-             if ( !GetBoolArg("-disablewallet", false) && KOMODO_NSPV_FULLNODE )
+             if ( !GetBoolArg("-disablewallet", false) && VAPORUM_NSPV_FULLNODE )
                  pwalletMain->EraseFromWallet(tx.GetHash());
 #endif
         } else SyncWithWallets(tx, NULL);
@@ -4121,7 +4121,7 @@ int32_t vaporum_activate_sapling(CBlockIndex *pindex)
     }
     height = pindex->nHeight;
     blocktime = (uint32_t)pindex->nTime;
-    //LogPrintf("vaporum_activate_sapling.%d starting blocktime %u cmp.%d\n",height,blocktime,blocktime > KOMODO_SAPLING_ACTIVATION);
+    //LogPrintf("vaporum_activate_sapling.%d starting blocktime %u cmp.%d\n",height,blocktime,blocktime > VAPORUM_SAPLING_ACTIVATION);
 
     // avoid trying unless we have at least 30 blocks
     if (height < 30)
@@ -4140,25 +4140,25 @@ int32_t vaporum_activate_sapling(CBlockIndex *pindex)
     }
     height = pindex->nHeight;
     blocktime = (uint32_t)pindex->nTime;
-    //LogPrintf("starting blocktime %u cmp.%d\n",blocktime,blocktime > KOMODO_SAPLING_ACTIVATION);
-    if ( blocktime > KOMODO_SAPLING_ACTIVATION ) // find the earliest transition
+    //LogPrintf("starting blocktime %u cmp.%d\n",blocktime,blocktime > VAPORUM_SAPLING_ACTIVATION);
+    if ( blocktime > VAPORUM_SAPLING_ACTIVATION ) // find the earliest transition
     {
         while ( (prev= pindex->pprev) != 0 )
         {
             prevht = prev->nHeight;
             prevtime = (uint32_t)prev->nTime;
-            //LogPrintf("(%d, %u).%d -> (%d, %u).%d\n",prevht,prevtime,prevtime > KOMODO_SAPLING_ACTIVATION,height,blocktime,blocktime > KOMODO_SAPLING_ACTIVATION);
+            //LogPrintf("(%d, %u).%d -> (%d, %u).%d\n",prevht,prevtime,prevtime > VAPORUM_SAPLING_ACTIVATION,height,blocktime,blocktime > VAPORUM_SAPLING_ACTIVATION);
             if ( prevht+1 != height )
             {
                 LogPrintf("vaporum_activate_sapling: unexpected non-contiguous ht %d vs %d\n",prevht,height);
                 return(0);
             }
-            if ( prevtime <= KOMODO_SAPLING_ACTIVATION && blocktime > KOMODO_SAPLING_ACTIVATION )
+            if ( prevtime <= VAPORUM_SAPLING_ACTIVATION && blocktime > VAPORUM_SAPLING_ACTIVATION )
             {
                 activation = height + 60;
                 LogPrintf("%s transition at %d (%d, %u) -> (%d, %u)\n",chainName.symbol().c_str(),height,prevht,prevtime,height,blocktime);
             }
-            if ( prevtime < KOMODO_SAPLING_ACTIVATION-3600*24 )
+            if ( prevtime < VAPORUM_SAPLING_ACTIVATION-3600*24 )
                 break;
             pindex = prev;
             height = prevht;
@@ -4199,12 +4199,12 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew, CBlock *
             return AbortNode(state, "Failed to read block");
         pblock = &block;
     }
-    KOMODO_CONNECTING = (int32_t)pindexNew->nHeight;
+    VAPORUM_CONNECTING = (int32_t)pindexNew->nHeight;
     //LogPrintf("%s connecting ht.%d maxsize.%d vs %d\n",ASSETCHAINS_SYMBOL,(int32_t)pindexNew->nHeight,MAX_BLOCK_SIZE(pindexNew->nHeight),(int32_t)::GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION));
     // Get the current commitment tree
     SproutMerkleTree oldSproutTree;
     SaplingMerkleTree oldSaplingTree;
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
     {
         assert(pcoinsTip->GetSproutAnchorAt(pcoinsTip->GetBestAnchor(SPROUT), oldSproutTree));
         assert(pcoinsTip->GetSaplingAnchorAt(pcoinsTip->GetBestAnchor(SAPLING), oldSaplingTree));
@@ -4216,7 +4216,7 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew, CBlock *
     {
         CCoinsViewCache view(pcoinsTip);
         bool rv = ConnectBlock(*pblock, state, pindexNew, view, false, true);
-        KOMODO_CONNECTING = -1;
+        VAPORUM_CONNECTING = -1;
         GetMainSignals().BlockChecked(*pblock, state);
         if (!rv) {
             if (state.IsInvalid())
@@ -4228,13 +4228,13 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew, CBlock *
         mapBlockSource.erase(pindexNew->GetBlockHash());
         nTime3 = GetTimeMicros(); nTimeConnectTotal += nTime3 - nTime2;
         LogPrint("bench", "  - Connect total: %.2fms [%.2fs]\n", (nTime3 - nTime2) * 0.001, nTimeConnectTotal * 0.000001);
-        if ( KOMODO_NSPV_FULLNODE )
+        if ( VAPORUM_NSPV_FULLNODE )
             assert(view.Flush());
     }
     int64_t nTime4 = GetTimeMicros(); nTimeFlush += nTime4 - nTime3;
     LogPrint("bench", "  - Flush: %.2fms [%.2fs]\n", (nTime4 - nTime3) * 0.001, nTimeFlush * 0.000001);
     // Write the chain state to disk, if necessary.
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
     {
         if (!FlushStateToDisk(state, FLUSH_STATE_IF_NEEDED))
             return false;
@@ -4250,7 +4250,7 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew, CBlock *
 
     // Update chainActive & related variables.
     UpdateTip(pindexNew);
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
     {
         // Tell wallet about transactions that went from mempool
         // to conflicted:
@@ -4270,19 +4270,19 @@ bool static ConnectTip(CValidationState &state, CBlockIndex *pindexNew, CBlock *
     int64_t nTime6 = GetTimeMicros(); nTimePostConnect += nTime6 - nTime5; nTimeTotal += nTime6 - nTime1;
     LogPrint("bench", "  - Connect postprocess: %.2fms [%.2fs]\n", (nTime6 - nTime5) * 0.001, nTimePostConnect * 0.000001);
     LogPrint("bench", "- Connect block: %.2fms [%.2fs]\n", (nTime6 - nTime1) * 0.001, nTimeTotal * 0.000001);
-    if ( KOMODO_LONGESTCHAIN != 0 && (pindexNew->nHeight == KOMODO_LONGESTCHAIN || pindexNew->nHeight == KOMODO_LONGESTCHAIN+1) )
-        KOMODO_INSYNC = (int32_t)pindexNew->nHeight;
-    else KOMODO_INSYNC = 0;
-    //LogPrintf("connect.%d insync.%d ASSETCHAINS_SAPLING.%d\n",(int32_t)pindexNew->nHeight,KOMODO_INSYNC,ASSETCHAINS_SAPLING);
-    /*if ( KOMODO_INSYNC != 0 ) //ASSETCHAINS_SYMBOL[0] == 0 &&
+    if ( VAPORUM_LONGESTCHAIN != 0 && (pindexNew->nHeight == VAPORUM_LONGESTCHAIN || pindexNew->nHeight == VAPORUM_LONGESTCHAIN+1) )
+        VAPORUM_INSYNC = (int32_t)pindexNew->nHeight;
+    else VAPORUM_INSYNC = 0;
+    //LogPrintf("connect.%d insync.%d ASSETCHAINS_SAPLING.%d\n",(int32_t)pindexNew->nHeight,VAPORUM_INSYNC,ASSETCHAINS_SAPLING);
+    /*if ( VAPORUM_INSYNC != 0 ) //ASSETCHAINS_SYMBOL[0] == 0 &&
         vaporum_broadcast(pblock,8);
     else if ( ASSETCHAINS_SYMBOL[0] != 0 )
         vaporum_broadcast(pblock,4);*/
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
     {
-        if ( ASSETCHAINS_SAPLING <= 0 && pindexNew->nTime > KOMODO_SAPLING_ACTIVATION - 24*3600 )
+        if ( ASSETCHAINS_SAPLING <= 0 && pindexNew->nTime > VAPORUM_SAPLING_ACTIVATION - 24*3600 )
             vaporum_activate_sapling(pindexNew);
-        if ( ASSETCHAINS_CC != 0 && KOMODO_SNAPSHOT_INTERVAL != 0 && (pindexNew->nHeight % KOMODO_SNAPSHOT_INTERVAL) == 0 && pindexNew->nHeight >= KOMODO_SNAPSHOT_INTERVAL )
+        if ( ASSETCHAINS_CC != 0 && VAPORUM_SNAPSHOT_INTERVAL != 0 && (pindexNew->nHeight % VAPORUM_SNAPSHOT_INTERVAL) == 0 && pindexNew->nHeight >= VAPORUM_SNAPSHOT_INTERVAL )
         {
             uint64_t start = time(NULL);
             if ( !vaporum_dailysnapshot(pindexNew->nHeight) )
@@ -4448,12 +4448,12 @@ static bool ActivateBestChainStep(bool fSkipdpow, CValidationState &state, CBloc
             return false;
         fBlocksDisconnected = true;
     }
-    if ( KOMODO_REWIND != 0 )
+    if ( VAPORUM_REWIND != 0 )
     {
         CBlockIndex *tipindex;
-        LogPrintf(">>>>>>>>>>> rewind start ht.%d -> KOMODO_REWIND.%d\n",
-                chainActive.Tip()->nHeight,KOMODO_REWIND);
-        while ( KOMODO_REWIND > 0 && (tipindex= chainActive.Tip()) != 0 && tipindex->nHeight > KOMODO_REWIND )
+        LogPrintf(">>>>>>>>>>> rewind start ht.%d -> VAPORUM_REWIND.%d\n",
+                chainActive.Tip()->nHeight,VAPORUM_REWIND);
+        while ( VAPORUM_REWIND > 0 && (tipindex= chainActive.Tip()) != 0 && tipindex->nHeight > VAPORUM_REWIND )
         {
             fBlocksDisconnected = true;
             LogPrintf("%d ",(int32_t)tipindex->nHeight);
@@ -4461,7 +4461,7 @@ static bool ActivateBestChainStep(bool fSkipdpow, CValidationState &state, CBloc
             if ( !DisconnectTip(state) )
                 break;
         }
-        LogPrintf("reached rewind.%d, best to do: ./vaporum-cli -ac_name=%s stop\n",KOMODO_REWIND,chainName.symbol().c_str());
+        LogPrintf("reached rewind.%d, best to do: ./vaporum-cli -ac_name=%s stop\n",VAPORUM_REWIND,chainName.symbol().c_str());
 #ifdef WIN32
         boost::this_thread::sleep(boost::posix_time::milliseconds(20000));
 #else
@@ -4469,7 +4469,7 @@ static bool ActivateBestChainStep(bool fSkipdpow, CValidationState &state, CBloc
 #endif
 
         LogPrintf("resuming normal operations\n");
-        KOMODO_REWIND = 0;
+        VAPORUM_REWIND = 0;
         //return(true);
     }
     // Build list of new blocks to connect.
@@ -4720,7 +4720,7 @@ CBlockIndex* AddToBlockIndex(const CBlockHeader& block)
 
     if (it != mapBlockIndex.end())
     {
-        if ( it->second != 0 ) // vNodes.size() >= KOMODO_LIMITED_NETWORKSIZE, change behavior to allow vaporum_ensure to work
+        if ( it->second != 0 ) // vNodes.size() >= VAPORUM_LIMITED_NETWORKSIZE, change behavior to allow vaporum_ensure to work
         {
             // this is the strange case where somehow the hash is in the mapBlockIndex via as yet undetermined process, but the pindex for the hash is not there. Theoretically it is due to processing the block headers, but I have seen it get this case without having received it from the block headers or anywhere else... jl777
             //LogPrintf("addtoblockindex already there %p\n",it->second);
@@ -5462,7 +5462,7 @@ bool AcceptBlockHeader(int32_t *futureblockp,const CBlockHeader& block, CValidat
             *ppindex = pindex;
         if ( pindex != 0 && (pindex->nStatus & BLOCK_FAILED_MASK) != 0 )
         {
-            if ( ASSETCHAINS_CC == 0 )//&& (ASSETCHAINS_PRIVATE == 0 || KOMODO_INSYNC >= Params().GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight) )
+            if ( ASSETCHAINS_CC == 0 )//&& (ASSETCHAINS_PRIVATE == 0 || VAPORUM_INSYNC >= Params().GetConsensus().vUpgrades[Consensus::UPGRADE_SAPLING].nActivationHeight) )
                 return state.Invalid(error("%s: block is marked invalid", __func__), 0, "duplicate");
             else
             {
@@ -6594,10 +6594,10 @@ void UnloadBlockIndex()
 bool LoadBlockIndex(bool reindex)
 {
     // Load block index from databases
-    KOMODO_LOADINGBLOCKS = true;
+    VAPORUM_LOADINGBLOCKS = true;
     if (!reindex && !LoadBlockIndexDB())
     {
-        KOMODO_LOADINGBLOCKS = false;
+        VAPORUM_LOADINGBLOCKS = false;
         return false;
     }
     LogPrintf("finished loading blocks %s\n",chainName.symbol().c_str());
@@ -6659,7 +6659,7 @@ bool InitBlockIndex() {
             if (!ActivateBestChain(true, state, &block))
                 return error("LoadBlockIndex(): genesis block cannot be activated");
             // Force a chainstate write so that when we VerifyDB in a moment, it doesn't check stale data
-            if ( KOMODO_NSPV_FULLNODE )
+            if ( VAPORUM_NSPV_FULLNODE )
                 return FlushStateToDisk(state, FLUSH_STATE_ALWAYS);
             else return(true);
         } catch (const std::runtime_error& e) {
@@ -7245,7 +7245,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     int32_t nProtocolVersion;
     const CChainParams& chainparams = Params();
     LogPrint("net", "received: %s (%u bytes) peer=%d\n", SanitizeString(strCommand), vRecv.size(), pfrom->id);
-    //if ( KOMODO_NSPV_SUPERLITE )
+    //if ( VAPORUM_NSPV_SUPERLITE )
     //LogPrintf( "recv: %s peer=%d\n", SanitizeString(strCommand).c_str(), (int32_t)pfrom->GetId());
     if (mapArgs.count("-dropmessagestest") && GetRand(atoi(mapArgs["-dropmessagestest"])) == 0)
     {
@@ -7418,7 +7418,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     {
         pfrom->SetRecvVersion(min(pfrom->nVersion, PROTOCOL_VERSION));
 
-        if ( KOMODO_NSPV_SUPERLITE )
+        if ( VAPORUM_NSPV_SUPERLITE )
         {
             if ( (pfrom->nServices & NODE_NSPV) == 0 )
             {
@@ -7617,7 +7617,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     }
     else if (GetBoolArg("-nspv_msg", DEFAULT_NSPV_PROCESSING) && strCommand == "getnSPV")
     {
-        if ( KOMODO_NSPV == 0 )//&& KOMODO_INSYNC != 0 )
+        if ( VAPORUM_NSPV == 0 )//&& VAPORUM_INSYNC != 0 )
         {
             std::vector<uint8_t> payload;
             vRecv >> payload;
@@ -7627,7 +7627,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     }
     else if (GetBoolArg("-nspv_msg", DEFAULT_NSPV_PROCESSING) && strCommand == "nSPV")
     {
-        if ( KOMODO_NSPV_SUPERLITE )
+        if ( VAPORUM_NSPV_SUPERLITE )
         {
             std::vector<uint8_t> payload;
             vRecv >> payload;
@@ -7635,7 +7635,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
         }
         return(true);
     }
-    else if ( KOMODO_NSPV_SUPERLITE )
+    else if ( VAPORUM_NSPV_SUPERLITE )
         return(true);
     else if (strCommand == "inv")
     {
@@ -8460,7 +8460,7 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
             }
             state.fShouldBan = false;
         }
-        if ( KOMODO_NSPV_SUPERLITE )
+        if ( VAPORUM_NSPV_SUPERLITE )
         {
             vaporum_nSPV(pto);
             return(true);
@@ -8675,7 +8675,7 @@ extern "C" const char* getDataDir()
 CMutableTransaction CreateNewContextualCMutableTransaction(const Consensus::Params& consensusParams, int nHeight)
 {
     CMutableTransaction mtx;
-    if ( KOMODO_NSPV_SUPERLITE )
+    if ( VAPORUM_NSPV_SUPERLITE )
     {
         mtx.fOverwintered = true;
         mtx.nExpiryHeight = 0;

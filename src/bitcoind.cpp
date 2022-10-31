@@ -70,9 +70,9 @@ void WaitForShutdown(boost::thread_group* threadGroup)
     static const uint256 zeroid; //!< null uint256 constant
 
     // Tell the main threads to shutdown.
-    if (vaporum_currentheight()>KOMODO_EARLYTXID_HEIGHT && KOMODO_EARLYTXID!=zeroid && ((height=tx_height(KOMODO_EARLYTXID))==0 || height>KOMODO_EARLYTXID_HEIGHT))
+    if (vaporum_currentheight()>VAPORUM_EARLYTXID_HEIGHT && VAPORUM_EARLYTXID!=zeroid && ((height=tx_height(VAPORUM_EARLYTXID))==0 || height>VAPORUM_EARLYTXID_HEIGHT))
     {
-        LogPrintf("error: earlytx must be before block height %d or tx does not exist\n",KOMODO_EARLYTXID_HEIGHT);
+        LogPrintf("error: earlytx must be before block height %d or tx does not exist\n",VAPORUM_EARLYTXID_HEIGHT);
         StartShutdown();
     }
 
@@ -81,7 +81,7 @@ void WaitForShutdown(boost::thread_group* threadGroup)
         /* TODO: move to ThreadUpdateVaporumInternals */
         if ( chainName.isKMD() )
         {
-            if ( KOMODO_NSPV_FULLNODE ) {
+            if ( VAPORUM_NSPV_FULLNODE ) {
                 vaporum_update_interest();
                 vaporum_longestchain();
             }

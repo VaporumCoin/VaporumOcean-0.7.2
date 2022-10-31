@@ -25,9 +25,9 @@ BITCOIN_WALLET_TOOL_NAME=wallet-utility
 
 AC_CANONICAL_HOST
 
-AH_TOP([#ifndef KOMODO_CONFIG_H])
-AH_TOP([#define KOMODO_CONFIG_H])
-AH_BOTTOM([#endif //KOMODO_CONFIG_H])
+AH_TOP([#ifndef VAPORUM_CONFIG_H])
+AH_TOP([#define VAPORUM_CONFIG_H])
+AH_BOTTOM([#endif //VAPORUM_CONFIG_H])
 
 dnl faketime breaks configure and is only needed for make. Disable it here.
 unset FAKETIME
@@ -693,7 +693,7 @@ AC_SUBST(LIBMEMENV)
 
 if test x$enable_wallet != xno; then
     dnl Check for libdb_cxx only if wallet enabled
-    KOMODO_FIND_BDB62
+    VAPORUM_FIND_BDB62
 fi
 
 dnl Check for libminiupnpc (optional)
@@ -1031,15 +1031,15 @@ if test x$enable_bip70 != xno; then
 fi
 
 AC_MSG_CHECKING([whether to build vaporumd])
-AM_CONDITIONAL([BUILD_KOMODOD], [test x$build_vaporumd = xyes])
+AM_CONDITIONAL([BUILD_VAPORUMD], [test x$build_vaporumd = xyes])
 AC_MSG_RESULT($build_vaporumd)
 
 AC_MSG_CHECKING([whether to build utils (zcash-cli zcash-tx)])
-AM_CONDITIONAL([BUILD_KOMODO_UTILS], [test x$build_vaporum_utils = xyes])
+AM_CONDITIONAL([BUILD_VAPORUM_UTILS], [test x$build_vaporum_utils = xyes])
 AC_MSG_RESULT($build_vaporum_utils)
 
 AC_MSG_CHECKING([whether to build libraries])
-AM_CONDITIONAL([BUILD_KOMODO_LIBS], [test x$build_vaporum_libs = xyes])
+AM_CONDITIONAL([BUILD_VAPORUM_LIBS], [test x$build_vaporum_libs = xyes])
 if test x$build_vaporum_libs = xyes; then
   AC_DEFINE(HAVE_CONSENSUS_LIB, 1, [Define this symbol if the consensus lib has been built])
   AC_CONFIG_FILES([libzcashconsensus.pc:libzcashconsensus.pc.in])

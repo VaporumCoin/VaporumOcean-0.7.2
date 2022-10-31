@@ -88,7 +88,7 @@ index 381240428..4280a697e 100644
 +        ublock.push_back(Pair("minedby", item.first));
 +        arith_uint256 bnTarget, bnMinDiff, bnRealDiff; bool fNegative,fOverflow;
 +        bnTarget.SetCompact(item.second.nBits, &fNegative, &fOverflow);
-+        bnMinDiff.SetCompact(KOMODO_MINDIFF_NBITS,&fNegative,&fOverflow);
++        bnMinDiff.SetCompact(VAPORUM_MINDIFF_NBITS,&fNegative,&fOverflow);
 +        bnRealDiff = UintToArith256(hash);
 +        ublock.push_back(Pair("diffbits", bnTarget.ToString()));
 +        ublock.push_back(Pair("diffreal", bnRealDiff.ToString()));

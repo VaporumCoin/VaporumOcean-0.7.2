@@ -329,7 +329,7 @@ void *dicefinish(void *_ptr)
     dicepk = GetUnspendable(cp,0);
     GetCCaddress(cp,CCaddr,GetUnspendable(cp,0));
     LogPrintf("start dicefinish thread %s CCaddr.%s\n",coinaddr,CCaddr);
-    if ( (newht= KOMODO_INSYNC) == 0 )
+    if ( (newht= VAPORUM_INSYNC) == 0 )
     {
 #ifdef WIN32
         boost::this_thread::sleep(boost::posix_time::milliseconds(7000));
@@ -499,7 +499,7 @@ void *dicefinish(void *_ptr)
                 free(utxos);
             }
         }
-        if ( (newht= KOMODO_INSYNC) == 0 || newht == lastheight )
+        if ( (newht= VAPORUM_INSYNC) == 0 || newht == lastheight )
         {
 #ifdef WIN32
            boost::this_thread::sleep(boost::posix_time::milliseconds(3000));
@@ -959,7 +959,7 @@ bool DiceValidate(struct CCcontract_info *cp,Eval *eval,const CTransaction &tx, 
                     if ( (iswin= DiceIsWinner(entropy,entropyvout,txid,tx,vinTx,hash,sbits,minbet,maxbet,maxodds,timeoutblocks,fundingtxid)) != 0 )
                     {
                         // will only happen for fundingPubKey
-                        if ( KOMODO_INSYNC != 0 && IS_KOMODO_DEALERNODE != 0 )
+                        if ( VAPORUM_INSYNC != 0 && IS_VAPORUM_DEALERNODE != 0 )
                             DiceQueue(iswin,sbits,fundingtxid,txid,tx,entropyvout);
                     }
                     else
@@ -1692,7 +1692,7 @@ void *dealer0_loop(void *_arg)
     entropytxs = (CTransaction *)calloc(sizeof(*entropytxs),DICE_MINUTXOS);
     while ( 1 )
     {
-        while ( KOMODO_INSYNC == 0 || (height= KOMODO_INSYNC) == lastht )
+        while ( VAPORUM_INSYNC == 0 || (height= VAPORUM_INSYNC) == lastht )
         {
 #ifdef WIN32
            boost::this_thread::sleep(boost::posix_time::milliseconds(3000));
@@ -1824,8 +1824,8 @@ double DiceStatus(uint64_t txfee,char *planstr,uint256 fundingtxid,uint256 bettx
                 {
                     if ( myGetTransaction(betTx.vin[0].prevout.hash,entropyTx,hashBlock) != 0 )
                     {
-                        flag = IS_KOMODO_DEALERNODE != 0;
-                        if ( IS_KOMODO_DEALERNODE != 0 && scriptPubKey == fundingPubKey )
+                        flag = IS_VAPORUM_DEALERNODE != 0;
+                        if ( IS_VAPORUM_DEALERNODE != 0 && scriptPubKey == fundingPubKey )
                         {
                             bettorentropy = DiceGetEntropy(betTx,'B');
                             if ( (iswin= DiceIsWinner(hentropyproof,entropyvout,txid,betTx,entropyTx,bettorentropy,sbits,minbet,maxbet,maxodds,timeoutblocks,fundingtxid)) != 0 )
@@ -1854,7 +1854,7 @@ double DiceStatus(uint64_t txfee,char *planstr,uint256 fundingtxid,uint256 bettx
                 }
             }
         }
-        if ( didinit == 0 && IS_KOMODO_DEALERNODE == 0 && scriptPubKey == fundingPubKey )
+        if ( didinit == 0 && IS_VAPORUM_DEALERNODE == 0 && scriptPubKey == fundingPubKey )
         {
             strcpy(_planstr,planstr);
             dealer0_fundingtxid = fundingtxid;

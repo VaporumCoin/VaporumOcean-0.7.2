@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_WALLETVIEW_H
-#define KOMODO_QT_WALLETVIEW_H
+#ifndef VAPORUM_QT_WALLETVIEW_H
+#define VAPORUM_QT_WALLETVIEW_H
 
 #include "amount.h"
 
@@ -138,4 +138,4 @@ Q_SIGNALS:
     void setPrivacy(bool privacy);
 };
 
-#endif // KOMODO_QT_WALLETVIEW_H
+#endif // VAPORUM_QT_WALLETVIEW_H

@@ -13,8 +13,8 @@
  *                                                                            *
  ******************************************************************************/
 
-// #ifndef H_KOMODO25519_H
-// #define H_KOMODO25519_H
+// #ifndef H_VAPORUM25519_H
+// #define H_VAPORUM25519_H
 
 // derived from curve25519_donna
 #pragma once

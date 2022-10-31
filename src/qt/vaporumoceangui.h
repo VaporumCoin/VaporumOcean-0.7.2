@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_KOMODOOCEANGUI_H
-#define KOMODO_QT_KOMODOOCEANGUI_H
+#ifndef VAPORUM_QT_VAPORUMOCEANGUI_H
+#define VAPORUM_QT_VAPORUMOCEANGUI_H
 
 #if defined(HAVE_CONFIG_H)
 #include "config/bitcoin-config.h"
@@ -284,4 +284,4 @@ private Q_SLOTS:
     void onMenuSelection(QAction* action);
 };
 
-#endif // KOMODO_QT_KOMODOOCEANGUI_H
+#endif // VAPORUM_QT_VAPORUMOCEANGUI_H

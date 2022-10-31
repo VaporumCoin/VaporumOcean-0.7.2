@@ -96,7 +96,7 @@ if ENABLE_ZMQ
 EXTRA_LIBRARIES += $(LIBBITCOIN_ZMQ)
 endif
 
-if BUILD_KOMODO_LIBS
+if BUILD_VAPORUM_LIBS
 lib_LTLIBRARIES = libzcashconsensus.la
 LIBZCASH_CONSENSUS=libzcashconsensus.la
 else
@@ -107,11 +107,11 @@ bin_PROGRAMS =
 noinst_PROGRAMS =
 TESTS =
 
-if BUILD_KOMODOD
+if BUILD_VAPORUMD
   bin_PROGRAMS += vaporumd
 endif
 
-if BUILD_KOMODO_UTILS
+if BUILD_VAPORUM_UTILS
   bin_PROGRAMS += vaporum-cli vaporum-tx
 endif
 if ENABLE_WALLET
@@ -673,7 +673,7 @@ libzcash_a_CXXFLAGS = $(HARDENED_CXXFLAGS) -fwrapv -fno-strict-aliasing
 libzcash_a_CPPFLAGS += -DMONTGOMERY_OUTPUT
 
 # zcashconsensus library #
-if BUILD_KOMODO_LIBS
+if BUILD_VAPORUM_LIBS
 include_HEADERS = script/zcashconsensus.h
 libzcashconsensus_la_SOURCES = \
   crypto/equihash.cpp \

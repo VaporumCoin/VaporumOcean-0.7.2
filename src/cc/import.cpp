@@ -40,7 +40,7 @@
 /*extern std::string ASSETCHAINS_SELFIMPORT;
 extern uint16_t ASSETCHAINS_CODAPORT,ASSETCHAINS_BEAMPORT;
 extern uint8_t ASSETCHAINS_OVERRIDE_PUBKEY33[33];
-extern uint256 KOMODO_EARLYTXID;
+extern uint256 VAPORUM_EARLYTXID;
 
 // utilities from gateways.cpp
 uint256 BitcoinGetProofMerkleRoot(const std::vector<uint8_t> &proofData, std::vector<uint256> &txids);
@@ -316,9 +316,9 @@ int32_t CheckGATEWAYimport(CTransaction importTx,CTransaction burnTx,std::string
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > unspentOutputs;
 
     // ASSETCHAINS_SELFIMPORT is coin
-    if (KOMODO_EARLYTXID!=zeroid && bindtxid!=KOMODO_EARLYTXID)
+    if (VAPORUM_EARLYTXID!=zeroid && bindtxid!=VAPORUM_EARLYTXID)
     { 
-        LOGSTREAM("importgateway", CCLOG_INFO, stream << "CheckGATEWAYimport invalid import gateway. On this chain only valid import gateway is " << KOMODO_EARLYTXID.GetHex() << std::endl);
+        LOGSTREAM("importgateway", CCLOG_INFO, stream << "CheckGATEWAYimport invalid import gateway. On this chain only valid import gateway is " << VAPORUM_EARLYTXID.GetHex() << std::endl);
         return(-1);
     }
     // check for valid burn from external coin blockchain and if valid return(0);
@@ -656,7 +656,7 @@ bool Eval::ImportCoin(const std::vector<uint8_t> params, const CTransaction &imp
     // Check burntx shows correct outputs hash
     if (payoutsHash != SerializeHash(payouts))
         return Invalid("wrong-payouts");
-    if (targetCcid < KOMODO_FIRSTFUNGIBLEID)
+    if (targetCcid < VAPORUM_FIRSTFUNGIBLEID)
         return Invalid("chain-not-fungible");
     if (targetSymbol.empty())
         return Invalid("target-chain-not-specified");

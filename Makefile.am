@@ -5,17 +5,17 @@ SUBDIRS += doc/man
 endif
 .PHONY: deploy FORCE
 
-if BUILD_KOMODO_LIBS
+if BUILD_VAPORUM_LIBS
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libzcashconsensus.pc
 endif
 
-KOMODOD_BIN=$(top_builddir)/src/$(BITCOIN_DAEMON_NAME)$(EXEEXT)
-KOMODO_QT_BIN=$(top_builddir)/src/qt/$(BITCOIN_GUI_NAME)$(EXEEXT)
-KOMODO_CLI_BIN=$(top_builddir)/src/$(BITCOIN_CLI_NAME)$(EXEEXT)
-KOMODO_TX_BIN=$(top_builddir)/src/$(BITCOIN_TX_NAME)$(EXEEXT)
-KOMODO_WALLET_BIN=$(top_builddir)/src/$(BITCOIN_WALLET_TOOL_NAME)$(EXEEXT)
-KOMODO_WIN_INSTALLER=$(PACKAGE_NAME)-$(PACKAGE_VERSION)-win$(WINDOWS_BITS)-setup$(EXEEXT)
+VAPORUMD_BIN=$(top_builddir)/src/$(BITCOIN_DAEMON_NAME)$(EXEEXT)
+VAPORUM_QT_BIN=$(top_builddir)/src/qt/$(BITCOIN_GUI_NAME)$(EXEEXT)
+VAPORUM_CLI_BIN=$(top_builddir)/src/$(BITCOIN_CLI_NAME)$(EXEEXT)
+VAPORUM_TX_BIN=$(top_builddir)/src/$(BITCOIN_TX_NAME)$(EXEEXT)
+VAPORUM_WALLET_BIN=$(top_builddir)/src/$(BITCOIN_WALLET_TOOL_NAME)$(EXEEXT)
+VAPORUM_WIN_INSTALLER=$(PACKAGE_NAME)-$(PACKAGE_VERSION)-win$(WINDOWS_BITS)-setup$(EXEEXT)
 
 empty :=
 space := $(empty) $(empty)
@@ -77,13 +77,13 @@ endif
 dist-hook:
 	-$(GIT) archive --format=tar HEAD -- src/clientversion.cpp | $(AMTAR) -C $(top_distdir) -xf -
 
-$(KOMODO_WIN_INSTALLER): all-recursive
+$(VAPORUM_WIN_INSTALLER): all-recursive
 	$(MKDIR_P) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(KOMODOD_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(KOMODO_QT_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(KOMODO_CLI_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(KOMODO_TX_BIN) $(top_builddir)/release
-	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(KOMODO_WALLET_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VAPORUMD_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VAPORUM_QT_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VAPORUM_CLI_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VAPORUM_TX_BIN) $(top_builddir)/release
+	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $(VAPORUM_WALLET_BIN) $(top_builddir)/release
 
 	@test -f $(MAKENSIS) && $(MAKENSIS) -V2 $(top_builddir)/share/setup.nsi || \
 	  echo error: could not build $@
@@ -110,11 +110,11 @@ $(OSX_APP)/Contents/Resources/vaporum.icns: $(OSX_INSTALLER_ICONS)
 	$(MKDIR_P) $(@D)
 	$(INSTALL_DATA) $< $@
 
-# $(OSX_APP)/Contents/MacOS/Vaporum-Qt: $(KOMODO_QT_BIN)
+# $(OSX_APP)/Contents/MacOS/Vaporum-Qt: $(VAPORUM_QT_BIN)
 # 	$(MKDIR_P) $(@D)
 # 	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM)  $< $@
 
-$(OSX_APP)/Contents/MacOS/Vaporum-Qt: $(KOMODO_QT_BIN)
+$(OSX_APP)/Contents/MacOS/Vaporum-Qt: $(VAPORUM_QT_BIN)
 	$(MKDIR_P) $(@D)
 	STRIPPROG="$(STRIP)" $(INSTALL_STRIP_PROGRAM) $< $@
 
@@ -189,13 +189,13 @@ deploy: $(OSX_DMG)
 endif
 
 if TARGET_WINDOWS
-deploy: $(KOMODO_WIN_INSTALLER)
+deploy: $(VAPORUM_WIN_INSTALLER)
 endif
 
-$(KOMODOD_BIN): FORCE
+$(VAPORUMD_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
-$(KOMODO_CLI_BIN): FORCE
+$(VAPORUM_CLI_BIN): FORCE
 	$(MAKE) -C src $(@F)
 
 if USE_LCOV
@@ -380,7 +380,7 @@ EXTRA_DIST = $(top_srcdir)/share/genbuild.sh qa/pull-tester/rpc-tests.sh qa/pull
 install-exec-hook:
 	mv $(DESTDIR)$(bindir)/fetch-params.sh $(DESTDIR)$(bindir)/zcash-fetch-params
 
-CLEANFILES = $(OSX_DMG) $(KOMODO_WIN_INSTALLER)
+CLEANFILES = $(OSX_DMG) $(VAPORUM_WIN_INSTALLER)
 
 .INTERMEDIATE: $(COVERAGE_INFO)
 

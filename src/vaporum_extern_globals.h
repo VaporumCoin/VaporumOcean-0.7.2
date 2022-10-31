@@ -21,8 +21,8 @@
 #include <mutex>
 #include <cstdint>
 
-extern bool IS_KOMODO_NOTARY;
-extern bool IS_KOMODO_DEALERNODE;
+extern bool IS_VAPORUM_NOTARY;
+extern bool IS_VAPORUM_DEALERNODE;
 extern char KMDUSERPASS[8192+512+1];
 extern char BTCUSERPASS[8192]; 
 extern char ASSETCHAINS_USERPASS[4096];
@@ -39,33 +39,33 @@ extern uint16_t ASSETCHAINS_P2PPORT;
 extern uint16_t ASSETCHAINS_RPCPORT;
 extern uint16_t ASSETCHAINS_BEAMPORT;
 extern uint16_t ASSETCHAINS_CODAPORT;
-extern int32_t KOMODO_INSYNC;
-extern int32_t KOMODO_LASTMINED;
-extern int32_t prevKOMODO_LASTMINED;
-extern int32_t KOMODO_CCACTIVATE;
+extern int32_t VAPORUM_INSYNC;
+extern int32_t VAPORUM_LASTMINED;
+extern int32_t prevVAPORUM_LASTMINED;
+extern int32_t VAPORUM_CCACTIVATE;
 extern int32_t JUMBLR_PAUSE;
-extern int32_t KOMODO_MININGTHREADS;
+extern int32_t VAPORUM_MININGTHREADS;
 extern int32_t STAKED_NOTARY_ID;
 extern int32_t USE_EXTERNAL_PUBKEY;
 //extern int32_t ASSETCHAINS_SEED;
-extern int32_t KOMODO_ON_DEMAND;
-extern int32_t KOMODO_EXTERNAL_NOTARIES;
-extern int32_t KOMODO_REWIND;
+extern int32_t VAPORUM_ON_DEMAND;
+extern int32_t VAPORUM_EXTERNAL_NOTARIES;
+extern int32_t VAPORUM_REWIND;
 extern int32_t STAKED_ERA;
-extern int32_t KOMODO_CONNECTING;
-extern int32_t KOMODO_EXTRASATOSHI;
+extern int32_t VAPORUM_CONNECTING;
+extern int32_t VAPORUM_EXTRASATOSHI;
 extern int32_t ASSETCHAINS_FOUNDERS;
 extern int32_t ASSETCHAINS_CBMATURITY;
-extern int32_t KOMODO_NSPV;
-extern bool KOMODO_LOADINGBLOCKS;
+extern int32_t VAPORUM_NSPV;
+extern bool VAPORUM_LOADINGBLOCKS;
 extern uint32_t ASSETCHAINS_CC;
-extern uint32_t KOMODO_STOPAT;
-extern uint32_t KOMODO_DPOWCONFS;
+extern uint32_t VAPORUM_STOPAT;
+extern uint32_t VAPORUM_DPOWCONFS;
 extern uint32_t STAKING_MIN_DIFF;
 extern uint32_t ASSETCHAIN_INIT;
 extern uint32_t ASSETCHAINS_NUMALGOS;
 extern uint32_t ASSETCHAINS_MINDIFF[];
-extern uint64_t PENDING_KOMODO_TX;
+extern uint64_t PENDING_VAPORUM_TX;
 extern uint64_t ASSETCHAINS_TIMELOCKGTE;
 extern uint64_t ASSETCHAINS_ENDSUBSIDY[ASSETCHAINS_MAX_ERAS+1];
 extern uint64_t ASSETCHAINS_REWARD[ASSETCHAINS_MAX_ERAS+1];
@@ -77,10 +77,10 @@ extern uint64_t ASSETCHAINS_TIMEUNLOCKTO;
 
 extern std::mutex vaporum_mutex;
 //extern pthread_mutex_t vaporum_mutex;
-extern pthread_mutex_t KOMODO_CC_mutex;
+extern pthread_mutex_t VAPORUM_CC_mutex;
 
 /**
- * @brief Given a currency name, return the index in the KOMODO_STATES array
+ * @brief Given a currency name, return the index in the VAPORUM_STATES array
  * 
  * @param origbase the currency name to look for
  * @return the index in the array, or -1

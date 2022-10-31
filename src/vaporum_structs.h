@@ -25,11 +25,11 @@
 #include "utlist.h"
 
 #define GENESIS_NBITS 0x1f00ffff
-#define KOMODO_MINRATIFY ((height < 90000) ? 7 : 11)
-#define KOMODO_NOTARIES_HARDCODED 180000 // DONT CHANGE Below this height notaries were hardcoded
-#define KOMODO_MAXBLOCKS 250000 // DONT CHANGE
+#define VAPORUM_MINRATIFY ((height < 90000) ? 7 : 11)
+#define VAPORUM_NOTARIES_HARDCODED 180000 // DONT CHANGE Below this height notaries were hardcoded
+#define VAPORUM_MAXBLOCKS 250000 // DONT CHANGE
 
-#define KOMODO_ASSETCHAIN_MAXLEN 65
+#define VAPORUM_ASSETCHAIN_MAXLEN 65
 
 #include "bits256.h"
 #include <mutex>
@@ -42,7 +42,7 @@ struct vaporum_event
     uint16_t len;
     int32_t height;
     uint8_t type,reorged;
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN];
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN];
     uint8_t space[];
 };
 

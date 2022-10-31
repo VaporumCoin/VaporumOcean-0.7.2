@@ -177,8 +177,8 @@ UniValue migrate_converttoexport(const UniValue& params, bool fHelp, const CPubK
             "import transaction.\n"
             );
 
-    if (ASSETCHAINS_CC < KOMODO_FIRSTFUNGIBLEID)
-        throw runtime_error("-ac_cc < KOMODO_FIRSTFUNGIBLEID");
+    if (ASSETCHAINS_CC < VAPORUM_FIRSTFUNGIBLEID)
+        throw runtime_error("-ac_cc < VAPORUM_FIRSTFUNGIBLEID");
 
     if ( chainName.isKMD() )
         throw runtime_error("Must be called on assetchain");
@@ -245,8 +245,8 @@ UniValue migrate_createburntransaction(const UniValue& params, bool fHelp, const
             "the \"migrate_createimporttransaction\" method to get the corresponding import transaction.\n"
         );
 
-    if (ASSETCHAINS_CC < KOMODO_FIRSTFUNGIBLEID)
-        throw runtime_error("-ac_cc < KOMODO_FIRSTFUNGIBLEID");
+    if (ASSETCHAINS_CC < VAPORUM_FIRSTFUNGIBLEID)
+        throw runtime_error("-ac_cc < VAPORUM_FIRSTFUNGIBLEID");
 
     if (chainName.isKMD())
         throw runtime_error("Must be called on assetchain");
@@ -526,8 +526,8 @@ UniValue migrate_createimporttransaction(const UniValue& params, bool fHelp, con
                 "optional notarytxids are txids of notary operator proofs of burn tx existense (from destination chain).\n"
                 "Do not make subsequent call to migrate_completeimporttransaction if notary txids are set");
 
-    if (ASSETCHAINS_CC < KOMODO_FIRSTFUNGIBLEID)
-        throw runtime_error("-ac_cc < KOMODO_FIRSTFUNGIBLEID");
+    if (ASSETCHAINS_CC < VAPORUM_FIRSTFUNGIBLEID)
+        throw runtime_error("-ac_cc < VAPORUM_FIRSTFUNGIBLEID");
 
     if ( chainName.isKMD() )
         throw runtime_error("Must be called on assetchain");

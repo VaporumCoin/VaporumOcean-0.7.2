@@ -371,7 +371,7 @@ void TxToJSON(const CTransaction& tx, const uint256 hashBlock, UniValue& entry)
         const CTxOut& txout = tx.vout[i];
         UniValue out(UniValue::VOBJ);
         out.push_back(Pair("value", ValueFromAmount(txout.nValue)));
-        if ( KOMODO_NSPV_FULLNODE && chainName.isKMD() && tx.nLockTime >= 500000000 && (tipindex= chainActive.Tip()) != 0 )
+        if ( VAPORUM_NSPV_FULLNODE && chainName.isKMD() && tx.nLockTime >= 500000000 && (tipindex= chainActive.Tip()) != 0 )
         {
             int64_t interest; int32_t txheight; uint32_t locktime;
             interest = vaporum_accrued_interest(&txheight,&locktime,tx.GetHash(),i,0,txout.nValue,(int32_t)tipindex->nHeight);
@@ -811,7 +811,7 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp, const CPubKey&
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Vaporum address or script: ") + name_);
             }
 
-            if (!(fExperimentalMode && IS_KOMODO_NOTARY)) {
+            if (!(fExperimentalMode && IS_VAPORUM_NOTARY)) {
                 // support of sending duplicates in createrawtransaction requires experimental features enabled and
                 // notary flag, to prevent common users to get messed up with duplicates
 
@@ -1313,7 +1313,7 @@ UniValue sendrawtransaction(const UniValue& params, bool fHelp, const CPubKey& m
     bool fOverrideFees = false;
     if (params.size() > 1)
         fOverrideFees = params[1].get_bool();
-    if ( KOMODO_NSPV_FULLNODE )
+    if ( VAPORUM_NSPV_FULLNODE )
     {
         CCoinsViewCache &view = *pcoinsTip;
         const CCoins* existingCoins = view.AccessCoins(hashTx);

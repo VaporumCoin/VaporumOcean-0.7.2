@@ -16,7 +16,7 @@
 #include "vaporum_globals.h"
 #include "vaporum_extern_globals.h"
 #include "vaporum.h" // vaporum_stateupdate()
-#include "vaporum_structs.h" // KOMODO_NOTARIES_HARDCODED
+#include "vaporum_structs.h" // VAPORUM_NOTARIES_HARDCODED
 #include "vaporum_utils.h" // vaporum_stateptr
 #include "vaporum_bitcoind.h"
 
@@ -89,9 +89,9 @@ int32_t getacseason(uint32_t timestamp)
  */
 int32_t ht_index_from_height(int32_t height)
 {
-    int32_t htind = height / KOMODO_ELECTION_GAP;
-    if ( htind >= KOMODO_MAXBLOCKS / KOMODO_ELECTION_GAP )
-        htind = (KOMODO_MAXBLOCKS / KOMODO_ELECTION_GAP) - 1;
+    int32_t htind = height / VAPORUM_ELECTION_GAP;
+    if ( htind >= VAPORUM_MAXBLOCKS / VAPORUM_ELECTION_GAP )
+        htind = (VAPORUM_MAXBLOCKS / VAPORUM_ELECTION_GAP) - 1;
     return htind;
 }
 
@@ -144,7 +144,7 @@ int32_t vaporum_notaries(uint8_t pubkeys[64][33],int32_t height,uint32_t timesta
         if ( chainName.isKMD() )
         {
             // This is KMD, use block heights to determine the KMD notary season.. 
-            if ( height >= KOMODO_NOTARIES_HARDCODED )
+            if ( height >= VAPORUM_NOTARIES_HARDCODED )
                 kmd_season = getkmdseason(height);
         }
         else 
@@ -242,16 +242,16 @@ int32_t vaporum_ratify_threshold(int32_t height,uint64_t signedmask)
 void vaporum_notarysinit(int32_t origheight,uint8_t pubkeys[64][33],int32_t num)
 {
     if ( Pubkeys == 0 )
-        Pubkeys = (knotaries_entry *)calloc(1 + (KOMODO_MAXBLOCKS / KOMODO_ELECTION_GAP),sizeof(*Pubkeys));
+        Pubkeys = (knotaries_entry *)calloc(1 + (VAPORUM_MAXBLOCKS / VAPORUM_ELECTION_GAP),sizeof(*Pubkeys));
     knotaries_entry N;
     memset(&N,0,sizeof(N));
     // calculate the height
     int32_t htind = 0; // height index (number of elections so far)
     if ( origheight > 0 )
     {
-        int32_t height = (origheight + KOMODO_ELECTION_GAP/2);
-        height /= KOMODO_ELECTION_GAP;
-        height = ((height + 1) * KOMODO_ELECTION_GAP);
+        int32_t height = (origheight + VAPORUM_ELECTION_GAP/2);
+        height /= VAPORUM_ELECTION_GAP;
+        height = ((height + 1) * VAPORUM_ELECTION_GAP);
         htind = ht_index_from_height(height);
     }
     {
@@ -264,7 +264,7 @@ void vaporum_notarysinit(int32_t origheight,uint8_t pubkeys[64][33],int32_t num)
             HASH_ADD_KEYPTR(hh,N.Notaries,kp->pubkey,33,kp);
         }
         N.numnotaries = num;
-        for (int32_t i=htind; i<KOMODO_MAXBLOCKS / KOMODO_ELECTION_GAP; i++)
+        for (int32_t i=htind; i<VAPORUM_MAXBLOCKS / VAPORUM_ELECTION_GAP; i++)
         {
             if ( Pubkeys[i].height != 0 && origheight < hwmheight )
             {
@@ -272,7 +272,7 @@ void vaporum_notarysinit(int32_t origheight,uint8_t pubkeys[64][33],int32_t num)
                 break;
             }
             Pubkeys[i] = N;
-            Pubkeys[i].height = i * KOMODO_ELECTION_GAP;
+            Pubkeys[i].height = i * VAPORUM_ELECTION_GAP;
         }
     }
     if ( origheight > hwmheight )
@@ -287,12 +287,12 @@ int32_t vaporum_chosennotary(int32_t *notaryidp,int32_t height,uint8_t *pubkey33
     int32_t modval = -1;
 
     *notaryidp = -1;
-    if ( height < 0 )//|| height >= KOMODO_MAXBLOCKS )
+    if ( height < 0 )//|| height >= VAPORUM_MAXBLOCKS )
     {
         LogPrintf("vaporum_chosennotary ht.%d illegal\n",height);
         return(-1);
     }
-    if ( height >= KOMODO_NOTARIES_HARDCODED || !chainName.isKMD() )
+    if ( height >= VAPORUM_NOTARIES_HARDCODED || !chainName.isKMD() )
     {
         if ( (*notaryidp= vaporum_electednotary(&numnotaries,pubkey33,height,timestamp)) >= 0 && numnotaries != 0 )
         {
@@ -332,8 +332,8 @@ int32_t vaporum_chosennotary(int32_t *notaryidp,int32_t height,uint8_t *pubkey33
  */
 const notarized_checkpoint *vaporum_npptr(int32_t height)
 {
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN];
-    char dest[KOMODO_ASSETCHAIN_MAXLEN]; 
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN];
+    char dest[VAPORUM_ASSETCHAIN_MAXLEN]; 
 
     vaporum_state *sp = vaporum_stateptr(symbol, dest);
     if ( sp != nullptr )
@@ -349,8 +349,8 @@ const notarized_checkpoint *vaporum_npptr(int32_t height)
  */
 int32_t vaporum_prevMoMheight()
 {
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN];
-    char dest[KOMODO_ASSETCHAIN_MAXLEN];
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN];
+    char dest[VAPORUM_ASSETCHAIN_MAXLEN];
 
     vaporum_state *sp = vaporum_stateptr(symbol,dest);
     if ( sp != nullptr )
@@ -369,8 +369,8 @@ int32_t vaporum_prevMoMheight()
  */
 int32_t vaporum_notarized_height(int32_t *prevMoMheightp,uint256 *hashp,uint256 *txidp)
 {
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN];
-    char dest[KOMODO_ASSETCHAIN_MAXLEN];
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN];
+    char dest[VAPORUM_ASSETCHAIN_MAXLEN];
 
     *prevMoMheightp = 0;
     memset(hashp,0,sizeof(*hashp));
@@ -387,11 +387,11 @@ int32_t vaporum_notarized_height(int32_t *prevMoMheightp,uint256 *hashp,uint256 
 int32_t vaporum_dpowconfs(int32_t txheight,int32_t numconfs)
 {
     static int32_t hadnotarization;
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN];
-    char dest[KOMODO_ASSETCHAIN_MAXLEN];
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN];
+    char dest[VAPORUM_ASSETCHAIN_MAXLEN];
     vaporum_state *sp;
 
-    if ( KOMODO_DPOWCONFS != 0 && txheight > 0 && numconfs > 0 && (sp= vaporum_stateptr(symbol,dest)) != nullptr )
+    if ( VAPORUM_DPOWCONFS != 0 && txheight > 0 && numconfs > 0 && (sp= vaporum_stateptr(symbol,dest)) != nullptr )
     {
         if ( sp->LastNotarizedHeight() > 0 )
         {
@@ -437,8 +437,8 @@ int32_t vaporum_MoMdata(int32_t *notarized_htp,uint256 *MoMp,uint256 *kmdtxidp,i
  */
 int32_t vaporum_notarizeddata(int32_t nHeight,uint256 *notarized_hashp,uint256 *notarized_desttxidp)
 {
-    char symbol[KOMODO_ASSETCHAIN_MAXLEN];
-    char dest[KOMODO_ASSETCHAIN_MAXLEN];
+    char symbol[VAPORUM_ASSETCHAIN_MAXLEN];
+    char dest[VAPORUM_ASSETCHAIN_MAXLEN];
 
     vaporum_state *sp = vaporum_stateptr(symbol,dest);
     if ( sp != nullptr )

@@ -789,7 +789,7 @@ int32_t vaporum_block2height(CBlock *block)
 bool vaporum_block2pubkey33(uint8_t *pubkey33,CBlock *block)
 {
     int32_t n;
-    if ( !KOMODO_LOADINGBLOCKS )
+    if ( !VAPORUM_LOADINGBLOCKS )
         memset(pubkey33,0xff,33);
     else memset(pubkey33,0,33);
     if ( block->vtx[0].vout.size() > 0 )
@@ -1114,18 +1114,18 @@ int32_t vaporum_isrealtime(int32_t *kmdheightp)
  */
 bool vaporum_validate_interest(const CTransaction &tx,int32_t txheight,uint32_t cmptime)
 {
-    if ( KOMODO_REWIND == 0 && chainName.isKMD() && (int64_t)tx.nLockTime >= LOCKTIME_THRESHOLD ) //1473793441 )
+    if ( VAPORUM_REWIND == 0 && chainName.isKMD() && (int64_t)tx.nLockTime >= LOCKTIME_THRESHOLD ) //1473793441 )
     {
         if ( txheight > 246748 ) // a long time ago
         {
             if ( txheight < 247205 ) // a long time ago
                 cmptime -= 16000; // subtract about 4 1/2 hours
-            if ( (int64_t)tx.nLockTime < cmptime-KOMODO_MAXMEMPOOLTIME )
+            if ( (int64_t)tx.nLockTime < cmptime-VAPORUM_MAXMEMPOOLTIME )
             {  
                 // transaction has been in mempool for more than an hour
                 if ( tx.nLockTime != 1477258935 )
                 {
-                    LogPrintf("vaporum_validate_interest.%d reject.%d [%d] locktime %u cmp2.%u\n",1,txheight,(int32_t)(tx.nLockTime - (cmptime-KOMODO_MAXMEMPOOLTIME)),(uint32_t)tx.nLockTime,cmptime);
+                    LogPrintf("vaporum_validate_interest.%d reject.%d [%d] locktime %u cmp2.%u\n",1,txheight,(int32_t)(tx.nLockTime - (cmptime-VAPORUM_MAXMEMPOOLTIME)),(uint32_t)tx.nLockTime,cmptime);
                 }
                 return false;
             }
@@ -1748,7 +1748,7 @@ bool vaporum_appendACscriptpub()
     {
         CTransaction tx; uint256 blockhash; 
         // get transaction and check that it occured before height 100. 
-        if ( myGetTransaction(KOMODO_EARLYTXID,tx,blockhash) && mapBlockIndex[blockhash]->nHeight < KOMODO_EARLYTXID_HEIGHT )
+        if ( myGetTransaction(VAPORUM_EARLYTXID,tx,blockhash) && mapBlockIndex[blockhash]->nHeight < VAPORUM_EARLYTXID_HEIGHT )
         {
              for (int i = 0; i < tx.vout.size(); i++) 
              {
@@ -1763,7 +1763,7 @@ bool vaporum_appendACscriptpub()
                  }
              }
         }
-        LogPrintf( "could not get KOMODO_EARLYTXID.%s OP_RETURN data. Restart with correct txid!\n", KOMODO_EARLYTXID.GetHex().c_str());
+        LogPrintf( "could not get VAPORUM_EARLYTXID.%s OP_RETURN data. Restart with correct txid!\n", VAPORUM_EARLYTXID.GetHex().c_str());
         StartShutdown();
     }
     return false;
@@ -1772,29 +1772,29 @@ bool vaporum_appendACscriptpub()
 void GetVaporumEarlytxidScriptPub()
 {
     AssertLockHeld(cs_main);
-    if ( KOMODO_EARLYTXID == zeroid )
+    if ( VAPORUM_EARLYTXID == zeroid )
     {
         LogPrintf( "Restart deamon with -earlytxid.\n");
         StartShutdown();
         return;
     }
-    if ( chainActive.Height() < KOMODO_EARLYTXID_HEIGHT )
+    if ( chainActive.Height() < VAPORUM_EARLYTXID_HEIGHT )
     {
-        LogPrintf("Cannot fetch -earlytxid before block %d.\n",KOMODO_EARLYTXID_HEIGHT);
+        LogPrintf("Cannot fetch -earlytxid before block %d.\n",VAPORUM_EARLYTXID_HEIGHT);
         StartShutdown();
         return;
     }
     CTransaction tx; uint256 blockhash; int32_t i;
     // get transaction and check that it occured before height 100. 
-    if ( myGetTransaction(KOMODO_EARLYTXID,tx,blockhash) && mapBlockIndex[blockhash]->nHeight < KOMODO_EARLYTXID_HEIGHT )
+    if ( myGetTransaction(VAPORUM_EARLYTXID,tx,blockhash) && mapBlockIndex[blockhash]->nHeight < VAPORUM_EARLYTXID_HEIGHT )
     {
         for (i = 0; i < tx.vout.size(); i++) 
             if ( tx.vout[i].scriptPubKey[0] == OP_RETURN )
                 break;
         if ( i < tx.vout.size() )
         {
-            KOMODO_EARLYTXID_SCRIPTPUB = CScript(tx.vout[i].scriptPubKey.begin()+3, tx.vout[i].scriptPubKey.end());
-            LogPrintf( "KOMODO_EARLYTXID_SCRIPTPUB.%s\n", HexStr(KOMODO_EARLYTXID_SCRIPTPUB.begin(),KOMODO_EARLYTXID_SCRIPTPUB.end()).c_str());
+            VAPORUM_EARLYTXID_SCRIPTPUB = CScript(tx.vout[i].scriptPubKey.begin()+3, tx.vout[i].scriptPubKey.end());
+            LogPrintf( "VAPORUM_EARLYTXID_SCRIPTPUB.%s\n", HexStr(VAPORUM_EARLYTXID_SCRIPTPUB.begin(),VAPORUM_EARLYTXID_SCRIPTPUB.end()).c_str());
             return;
         }
     }
@@ -1827,7 +1827,7 @@ int64_t vaporum_checkcommission(CBlock *pblock,int32_t height)
             if ( ASSETCHAINS_SCRIPTPUB.size() > 1 )
             {
                 static bool didinit = false;
-                if ( !didinit && height > KOMODO_EARLYTXID_HEIGHT && KOMODO_EARLYTXID != zeroid && vaporum_appendACscriptpub() )
+                if ( !didinit && height > VAPORUM_EARLYTXID_HEIGHT && VAPORUM_EARLYTXID != zeroid && vaporum_appendACscriptpub() )
                 {
                     LogPrintf( "appended CC_op_return to ASSETCHAINS_SCRIPTPUB.%s\n", ASSETCHAINS_SCRIPTPUB.c_str());
                     didinit = true;
@@ -1865,13 +1865,13 @@ int64_t vaporum_checkcommission(CBlock *pblock,int32_t height)
     return(checktoshis);
 }
 
-bool KOMODO_TEST_ASSETCHAIN_SKIP_POW = 0;
+bool VAPORUM_TEST_ASSETCHAIN_SKIP_POW = 0;
 
 int32_t vaporum_checkPOW(int64_t stakeTxValue, int32_t slowflag,CBlock *pblock,int32_t height)
 {
     uint256 hash,merkleroot; arith_uint256 bnTarget,bhash; bool fNegative,fOverflow; uint8_t *script,pubkey33[33],pubkeys[64][33]; int32_t i,scriptlen,possible,PoSperc,is_PoSblock=0,n,failed = 0,notaryid = -1; int64_t checktoshis,value; CBlockIndex *pprev;
-    if ( KOMODO_TEST_ASSETCHAIN_SKIP_POW == 0 && Params().NetworkIDString() == "regtest" )
-        KOMODO_TEST_ASSETCHAIN_SKIP_POW = 1;
+    if ( VAPORUM_TEST_ASSETCHAIN_SKIP_POW == 0 && Params().NetworkIDString() == "regtest" )
+        VAPORUM_TEST_ASSETCHAIN_SKIP_POW = 1;
     if ( !CheckEquihashSolution(pblock, Params()) )
     {
         LogPrintf("vaporum_checkPOW slowflag.%d ht.%d CheckEquihashSolution failed\n",slowflag,height);
@@ -1911,7 +1911,7 @@ int32_t vaporum_checkPOW(int64_t stakeTxValue, int32_t slowflag,CBlock *pblock,i
         }
         else if ( possible == 0 || !chainName.isKMD() )
         {
-            if ( KOMODO_TEST_ASSETCHAIN_SKIP_POW )
+            if ( VAPORUM_TEST_ASSETCHAIN_SKIP_POW )
                 return(0);
             if ( ASSETCHAINS_STAKED == 0 ) // vaporum_is_PoSblock will check bnTarget for staked chains
                 return(-1);
@@ -2075,7 +2075,7 @@ int32_t vaporum_acpublic(uint32_t tiptime)
             if ( (pindex= chainActive.Tip()) != 0 )
                 tiptime = pindex->nTime;
         }
-        if ( (chainName.isKMD() || chainName.isSymbol("ZEX")) && tiptime >= KOMODO_SAPLING_DEADLINE )
+        if ( (chainName.isKMD() || chainName.isSymbol("ZEX")) && tiptime >= VAPORUM_SAPLING_DEADLINE )
             acpublic = 1;
     }
     return(acpublic);

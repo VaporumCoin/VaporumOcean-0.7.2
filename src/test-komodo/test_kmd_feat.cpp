@@ -105,7 +105,7 @@ protected:
 
         UpdateNetworkUpgradeParameters(Consensus::UPGRADE_OVERWINTER, Consensus::NetworkUpgrade::ALWAYS_ACTIVE);
         UpdateNetworkUpgradeParameters(Consensus::UPGRADE_SAPLING, Consensus::NetworkUpgrade::ALWAYS_ACTIVE);
-        KOMODO_REWIND = 0;
+        VAPORUM_REWIND = 0;
         chainActive.SetTip(nullptr);
     }
 
@@ -336,7 +336,7 @@ TEST_F(VaporumFeatures, vaporum_interestnew) {
     // some not working values
     EXPECT_EQ(vaporum_interestnew(1, 1000LL, 1, 1), 0LL); 
     // time lower than cut off month time limit
-    EXPECT_EQ(vaporum_interestnew(1000000, 10LL*COIN, 1663839248, 1663839248 + (31 * 24 * 60 - 1) * 60 + 3600 /*KOMODO_MAXMEMPOOLTIME*/), 10LL*COIN/10512000 * (31*24*60 - 59)); 
+    EXPECT_EQ(vaporum_interestnew(1000000, 10LL*COIN, 1663839248, 1663839248 + (31 * 24 * 60 - 1) * 60 + 3600 /*VAPORUM_MAXMEMPOOLTIME*/), 10LL*COIN/10512000 * (31*24*60 - 59)); 
 
     // end of interest era
     EXPECT_EQ(vaporum_interestnew(7777777-1, 10LL*COIN, 1663839248, 1663839248 + (31 * 24 * 60 - 1) * 60 + 3600), 10LL*COIN/10512000 * (31*24*60 - 59)); 
@@ -383,7 +383,7 @@ TEST_F(VaporumFeatures, vaporum_interest) {
 
             // end of interest era
             EXPECT_EQ(vaporum_interest(7777777-1, nValue, 1663839248, 1663839248 + (31 * 24 * 60 - 1) * 60 + 3600), nValue/10512000 * (31*24*60 - 59)); 
-            EXPECT_EQ(vaporum_interest(7777777 /*KOMODO_ENDOFERA*/, nValue, 1663839248, 1663839248 + (31 * 24 * 60 - 1) * 60 + 3600), 0LL); 
+            EXPECT_EQ(vaporum_interest(7777777 /*VAPORUM_ENDOFERA*/, nValue, 1663839248, 1663839248 + (31 * 24 * 60 - 1) * 60 + 3600), 0LL); 
 
             // tip less than nLockTime
             EXPECT_EQ(vaporum_interest(1000000, nValue-1, 1663839248, 1663839248 - 1), 0); 
@@ -417,7 +417,7 @@ TEST_F(VaporumFeatures, vaporum_interest) {
             // nValue <= 25000LL*COIN
             // txheight < 250000 
 
-            uint64_t numerator = (10LL*COIN * 5000000 /*KOMODO_INTEREST*/);
+            uint64_t numerator = (10LL*COIN * 5000000 /*VAPORUM_INTEREST*/);
             uint32_t locktime = activation - 2 * days * 24 * 60 * 60;
             uint32_t tiptime = locktime + minutes * 60;
             ASSERT_TRUE(tiptime < activation);
@@ -453,7 +453,7 @@ TEST_F(VaporumFeatures, vaporum_interest) {
             {
                 int32_t txheight = htval.first;
                 CAmount nValue = htval.second;
-                uint64_t numerator = (static_cast<uint64_t>(nValue) * 5000000 /*KOMODO_INTEREST*/);  // NOTE: uint64_t (for CAmount it is an overflow here for some exceptions)
+                uint64_t numerator = (static_cast<uint64_t>(nValue) * 5000000 /*VAPORUM_INTEREST*/);  // NOTE: uint64_t (for CAmount it is an overflow here for some exceptions)
                 uint32_t locktime = 1484490069; // close to real tx locktime
                 // uint32_t locktime = 1663839248;
                 uint32_t tiptime = locktime + minutes * 60;

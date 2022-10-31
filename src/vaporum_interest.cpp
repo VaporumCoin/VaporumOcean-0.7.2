@@ -16,20 +16,20 @@
 #include "vaporum_bitcoind.h"
 #include "vaporum_utils.h" // dstr()
 
-#define KOMODO_INTEREST ((uint64_t)5000000) //((uint64_t)(0.05 * COIN))   // 5%
+#define VAPORUM_INTEREST ((uint64_t)5000000) //((uint64_t)(0.05 * COIN))   // 5%
 
 uint64_t _vaporum_interestnew(int32_t txheight,uint64_t nValue,uint32_t nLockTime,uint32_t tiptime)
 {
     int32_t minutes; 
     if ( nLockTime >= LOCKTIME_THRESHOLD 
             && tiptime > nLockTime 
-            && (minutes= (tiptime - nLockTime) / 60) >= (KOMODO_MAXMEMPOOLTIME/60) )
+            && (minutes= (tiptime - nLockTime) / 60) >= (VAPORUM_MAXMEMPOOLTIME/60) )
     {
         if ( minutes > 365 * 24 * 60 )
             minutes = 365 * 24 * 60;
         if ( txheight >= 1000000 && minutes > 31 * 24 * 60 )
             minutes = 31 * 24 * 60;
-        minutes -= ((KOMODO_MAXMEMPOOLTIME/60) - 1);
+        minutes -= ((VAPORUM_MAXMEMPOOLTIME/60) - 1);
         return (nValue / 10512000) * minutes;
     }
     return 0;
@@ -45,7 +45,7 @@ uint64_t _vaporum_interestnew(int32_t txheight,uint64_t nValue,uint32_t nLockTim
  */
 uint64_t vaporum_interestnew(int32_t txheight,uint64_t nValue,uint32_t nLockTime,uint32_t tiptime)
 {
-    if ( txheight < KOMODO_ENDOFERA 
+    if ( txheight < VAPORUM_ENDOFERA 
             && nLockTime >= LOCKTIME_THRESHOLD 
             && tiptime != 0 
             && nLockTime < tiptime 
@@ -68,7 +68,7 @@ uint64_t vaporum_interest(int32_t txheight,uint64_t nValue,uint32_t nLockTime,ui
     activation = 1491350400;  // 1491350400 5th April
     if ( !chainName.isKMD() )
         return(0);
-    if ( txheight >= KOMODO_ENDOFERA )
+    if ( txheight >= VAPORUM_ENDOFERA )
         return 0;
 
     if ( nLockTime >= LOCKTIME_THRESHOLD && tiptime != 0 && nLockTime < tiptime && nValue >= 10*COIN )
@@ -82,7 +82,7 @@ uint64_t vaporum_interest(int32_t txheight,uint64_t nValue,uint32_t nLockTime,ui
                 minutes -= 59;
             uint64_t denominator = (((uint64_t)365 * 24 * 60) / minutes);
             if ( denominator == 0 )
-                denominator = 1; // max KOMODO_INTEREST per transfer, do it at least annually!
+                denominator = 1; // max VAPORUM_INTEREST per transfer, do it at least annually!
             if ( nValue > 25000LL*COIN )
             {
                 bool exception = false;
@@ -124,7 +124,7 @@ uint64_t vaporum_interest(int32_t txheight,uint64_t nValue,uint32_t nLockTime,ui
                 }
                 else if ( txheight < 1000000 )
                 {
-                    uint64_t numerator = (nValue * KOMODO_INTEREST);
+                    uint64_t numerator = (nValue * VAPORUM_INTEREST);
                     interest = (numerator / denominator) / COIN;
                     uint64_t interestnew = _vaporum_interestnew(txheight,nValue,nLockTime,tiptime);
                     if ( interest < interestnew )
@@ -135,7 +135,7 @@ uint64_t vaporum_interest(int32_t txheight,uint64_t nValue,uint32_t nLockTime,ui
             }
             else
             {
-                uint64_t numerator = (nValue * KOMODO_INTEREST);
+                uint64_t numerator = (nValue * VAPORUM_INTEREST);
                 if ( txheight < 250000 || tiptime < activation )
                 {
                     if ( txheight < 250000 || numerator * minutes < 365 * 24 * 60 )

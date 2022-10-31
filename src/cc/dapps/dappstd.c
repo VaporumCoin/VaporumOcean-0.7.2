@@ -37,8 +37,8 @@ char whoami[MAXSTR];
 #define SMALLVAL 0.000000000000001
 #define SATOSHIDEN ((uint64_t)100000000L)
 #define dstr(x) ((double)(x) / SATOSHIDEN)
-#define KOMODO_ASSETCHAIN_MAXLEN 65
-char ASSETCHAINS_SYMBOL[KOMODO_ASSETCHAIN_MAXLEN];
+#define VAPORUM_ASSETCHAIN_MAXLEN 65
+char ASSETCHAINS_SYMBOL[VAPORUM_ASSETCHAIN_MAXLEN];
 char IPADDRESS[100];
 
 #ifdef _WIN32
@@ -539,7 +539,7 @@ uint16_t _vaporum_userpass(char *username, char *password, FILE *fp)
 
 uint16_t vaporum_userpass(char *userpass,const char *symbol)
 {
-    FILE *fp; uint16_t port = 0; char fname[512],username[512],password[512],confname[KOMODO_ASSETCHAIN_MAXLEN];
+    FILE *fp; uint16_t port = 0; char fname[512],username[512],password[512],confname[VAPORUM_ASSETCHAIN_MAXLEN];
     userpass[0] = 0;
     if ( strcmp("KMD",symbol) == 0 )
     {

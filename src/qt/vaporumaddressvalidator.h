@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_KOMODOADDRESSVALIDATOR_H
-#define KOMODO_QT_KOMODOADDRESSVALIDATOR_H
+#ifndef VAPORUM_QT_VAPORUMADDRESSVALIDATOR_H
+#define VAPORUM_QT_VAPORUMADDRESSVALIDATOR_H
 
 #include <QValidator>
 
@@ -36,4 +36,4 @@ private:
     bool _allowZAddresses;
 };
 
-#endif // KOMODO_QT_KOMODOADDRESSVALIDATOR_H
+#endif // VAPORUM_QT_VAPORUMADDRESSVALIDATOR_H

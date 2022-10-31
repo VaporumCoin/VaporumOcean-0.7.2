@@ -208,7 +208,7 @@ CBlockTemplate* CreateNewBlock(const CPubKey _pk,const CScript& _scriptPubKeyIn,
 
     // Create new block
     if ( gpucount < 0 )
-        gpucount = KOMODO_MAXGPUCOUNT;
+        gpucount = VAPORUM_MAXGPUCOUNT;
     std::unique_ptr<CBlockTemplate> pblocktemplate(new CBlockTemplate());
     if(!pblocktemplate.get())
     {
@@ -318,7 +318,7 @@ CBlockTemplate* CreateNewBlock(const CPubKey _pk,const CScript& _scriptPubKeyIn,
                 continue;
             }
             txvalue = tx.GetValueOut();
-            if ( KOMODO_VALUETOOBIG(txvalue) != 0 )
+            if ( VAPORUM_VALUETOOBIG(txvalue) != 0 )
                 continue;
 
             /* HF22 - check interest validation against pindexPrev->GetMedianTimePast() + 777 */
@@ -701,7 +701,7 @@ CBlockTemplate* CreateNewBlock(const CPubKey _pk,const CScript& _scriptPubKeyIn,
             txNew.nLockTime = std::max(pindexPrev->GetMedianTimePast()+1, GetTime());
         else txNew.nLockTime = std::max((int64_t)(pindexPrev->nTime+1), GetTime());        
 
-        if ( chainName.isKMD() && IS_KOMODO_NOTARY && My_notaryid >= 0 )
+        if ( chainName.isKMD() && IS_VAPORUM_NOTARY && My_notaryid >= 0 )
             txNew.vout[0].nValue += 5000;
         pblock->vtx[0] = txNew;
 
@@ -714,7 +714,7 @@ CBlockTemplate* CreateNewBlock(const CPubKey _pk,const CScript& _scriptPubKeyIn,
             if ( ASSETCHAINS_SCRIPTPUB.size() > 1 )
             {
                 static bool didinit = false;
-                if ( !didinit && nHeight > KOMODO_EARLYTXID_HEIGHT && KOMODO_EARLYTXID != zeroid && vaporum_appendACscriptpub() )
+                if ( !didinit && nHeight > VAPORUM_EARLYTXID_HEIGHT && VAPORUM_EARLYTXID != zeroid && vaporum_appendACscriptpub() )
                 {
                     LogPrintf( "appended ccopreturn to ASSETCHAINS_SCRIPTPUB.%s\n", ASSETCHAINS_SCRIPTPUB.c_str());
                     didinit = true;
@@ -803,14 +803,14 @@ CBlockTemplate* CreateNewBlock(const CPubKey _pk,const CScript& _scriptPubKeyIn,
         pblock->hashFinalSaplingRoot   = sapling_tree.root();
 
         // all Verus PoS chains need this data in the block at all times
-        if ( chainName.isKMD() || ASSETCHAINS_STAKED == 0 || KOMODO_MININGTHREADS > 0 )
+        if ( chainName.isKMD() || ASSETCHAINS_STAKED == 0 || VAPORUM_MININGTHREADS > 0 )
         {
             UpdateTime(pblock, Params().GetConsensus(), pindexPrev);
             pblock->nBits = GetNextWorkRequired(pindexPrev, pblock, Params().GetConsensus());
         }
         pblock->nSolution.clear();
         pblocktemplate->vTxSigOps[0] = GetLegacySigOpCount(pblock->vtx[0]);
-        if ( chainName.isKMD() && IS_KOMODO_NOTARY && My_notaryid >= 0 )
+        if ( chainName.isKMD() && IS_VAPORUM_NOTARY && My_notaryid >= 0 )
         {
             uint32_t r; CScript opret;
             CMutableTransaction txNotary = CreateNewContextualCMutableTransaction(Params().GetConsensus(), chainActive.Height() + 1);
@@ -854,7 +854,7 @@ CBlockTemplate* CreateNewBlock(const CPubKey _pk,const CScript& _scriptPubKeyIn,
                 return(0);
             }
         }
-        else if ( ASSETCHAINS_CC == 0 && pindexPrev != 0 && ASSETCHAINS_STAKED == 0 && (!chainName.isKMD() || !IS_KOMODO_NOTARY || My_notaryid < 0) )
+        else if ( ASSETCHAINS_CC == 0 && pindexPrev != 0 && ASSETCHAINS_STAKED == 0 && (!chainName.isKMD() || !IS_VAPORUM_NOTARY || My_notaryid < 0) )
         {
             CValidationState state;
             if ( !TestBlockValidity(state, *pblock, pindexPrev, false, false)) // invokes CC checks
@@ -1032,7 +1032,7 @@ static bool ProcessBlockFound(CBlock* pblock)
 
 #ifdef ENABLE_WALLET
     // Remove key from key pool
-    if ( !IS_KOMODO_NOTARY )
+    if ( !IS_VAPORUM_NOTARY )
     {
         if (GetArg("-mineraddress", "").empty()) {
             // Remove key from key pool
@@ -1059,8 +1059,8 @@ static bool ProcessBlockFound(CBlock* pblock)
     return true;
 }
 
-int32_t FOUND_BLOCK,KOMODO_MAYBEMINED;
-extern int32_t KOMODO_LASTMINED,KOMODO_INSYNC;
+int32_t FOUND_BLOCK,VAPORUM_MAYBEMINED;
+extern int32_t VAPORUM_LASTMINED,VAPORUM_INSYNC;
 arith_uint256 HASHTarget,HASHTarget_POW;
 
 // wait for peers to connect
@@ -1170,8 +1170,8 @@ void static BitcoinMiner()
 
     unsigned int n = chainparams.EquihashN();
     unsigned int k = chainparams.EquihashK();
-    uint8_t *script; uint64_t total; int32_t i,j,gpucount=KOMODO_MAXGPUCOUNT,notaryid = -1;
-    while ( (ASSETCHAIN_INIT == 0 || KOMODO_INITDONE == 0) )
+    uint8_t *script; uint64_t total; int32_t i,j,gpucount=VAPORUM_MAXGPUCOUNT,notaryid = -1;
+    while ( (ASSETCHAIN_INIT == 0 || VAPORUM_INITDONE == 0) )
     {
         //sleep(1);
         boost::this_thread::sleep_for(boost::chrono::seconds(1)); // allow to interrupt
@@ -1260,7 +1260,7 @@ void static BitcoinMiner()
 
 #ifdef ENABLE_WALLET
             // notaries always default to staking
-            CBlockTemplate *ptr = CreateNewBlockWithKey(reservekey, pindexPrev->nHeight+1, gpucount, ASSETCHAINS_STAKED != 0 && KOMODO_MININGTHREADS == 0);
+            CBlockTemplate *ptr = CreateNewBlockWithKey(reservekey, pindexPrev->nHeight+1, gpucount, ASSETCHAINS_STAKED != 0 && VAPORUM_MININGTHREADS == 0);
 #else
             CBlockTemplate *ptr = CreateNewBlockWithKey();
 #endif
@@ -1325,7 +1325,7 @@ void static BitcoinMiner()
             if ( chainName.isKMD() && notaryid >= 0 )
             {
                 j = 65;
-                if ( (Mining_height >= 235300 && Mining_height < 236000) || (Mining_height % KOMODO_ELECTION_GAP) > 64 || (Mining_height % KOMODO_ELECTION_GAP) == 0 || Mining_height > 1000000 )
+                if ( (Mining_height >= 235300 && Mining_height < 236000) || (Mining_height % VAPORUM_ELECTION_GAP) > 64 || (Mining_height % VAPORUM_ELECTION_GAP) == 0 || Mining_height > 1000000 )
                 {
                     int32_t dispflag = 1; // TODO: set this back to 0 when finished testing.
                     if ( notaryid <= 3 || notaryid == 32 || (notaryid >= 43 && notaryid <= 45) || notaryid == 51 || notaryid == 52 || notaryid == 56 || notaryid == 57 )
@@ -1339,7 +1339,7 @@ void static BitcoinMiner()
                         if ( i == 33 )
                             externalflag = 1;
                         else externalflag = 0;
-                        if ( IS_KOMODO_NOTARY )
+                        if ( IS_VAPORUM_NOTARY )
                         {
                             for (i=1; i<66; i++)
                                 if ( memcmp(pubkeys[i],pubkeys[0],33) == 0 )
@@ -1368,13 +1368,13 @@ void static BitcoinMiner()
                             if ( mids[j] == notaryid )
                                 break;
                         if ( j == 65 )
-                            KOMODO_LASTMINED = 0;
+                            VAPORUM_LASTMINED = 0;
                     } else LogPrintf("ht.%i all NN are elegible\n",Mining_height); //else LogPrintf("no nonz pubkeys\n");
 
                     if ((Mining_height >= 235300 && Mining_height < 236000) ||
-                        (j == 65 && Mining_height > KOMODO_MAYBEMINED + 1 && Mining_height > KOMODO_LASTMINED + 64))
+                        (j == 65 && Mining_height > VAPORUM_MAYBEMINED + 1 && Mining_height > VAPORUM_LASTMINED + 64))
                     {
-                        HASHTarget = arith_uint256().SetCompact(KOMODO_MINDIFF_NBITS);
+                        HASHTarget = arith_uint256().SetCompact(VAPORUM_MINDIFF_NBITS);
                         LogPrintf("I am the chosen one for %s ht.%d\n", chainName.symbol().c_str(), pindexPrev->nHeight + 1);
                     }
                     else
@@ -1417,7 +1417,7 @@ void static BitcoinMiner()
 
                                 if (isSecondBlockAllowed(notaryid, blocktime, tiptime + nMaxGAPAllowed, params.nHF22NotariesPriorityRotateDelta, vPriorityList))
                                 {
-                                    HASHTarget = arith_uint256().SetCompact(KOMODO_MINDIFF_NBITS);
+                                    HASHTarget = arith_uint256().SetCompact(VAPORUM_MINDIFF_NBITS);
                                     LogPrint("hfnet", "%s[%d]: notaryid.%ld, ht.%ld --> allowed to mine mindiff\n", __func__, __LINE__, notaryid, Mining_height);
                                 }
                             }
@@ -1432,7 +1432,7 @@ void static BitcoinMiner()
             {
                 int32_t percPoS,z; bool fNegative,fOverflow;
                 HASHTarget_POW = vaporum_PoWtarget(&percPoS,HASHTarget,Mining_height,ASSETCHAINS_STAKED,vaporum_newStakerActive(Mining_height, pblock->nTime));
-                HASHTarget.SetCompact(KOMODO_MINDIFF_NBITS,&fNegative,&fOverflow);
+                HASHTarget.SetCompact(VAPORUM_MINDIFF_NBITS,&fNegative,&fOverflow);
                 if ( ASSETCHAINS_STAKED < 100 )
                     LogPrintf("Block %d : PoS %d%% vs target %d%% \n",Mining_height,percPoS,(int32_t)ASSETCHAINS_STAKED);
             }
@@ -1461,7 +1461,7 @@ void static BitcoinMiner()
                 // (x_1, x_2, ...) = A(I, V, n, k)
                 LogPrint("pow", "Running Equihash solver \"%s\" with nNonce = %s\n",solver, pblock->nNonce.ToString());
                 arith_uint256 hashTarget,hashTarget_POW = HASHTarget_POW;
-                if ( KOMODO_MININGTHREADS > 0 && ASSETCHAINS_STAKED > 0 && ASSETCHAINS_STAKED < 100 && Mining_height > 10 )
+                if ( VAPORUM_MININGTHREADS > 0 && ASSETCHAINS_STAKED > 0 && ASSETCHAINS_STAKED < 100 && Mining_height > 10 )
                     hashTarget = HASHTarget_POW;
                 //else if ( ASSETCHAINS_ADAPTIVEPOW > 0 )
                 //    hashTarget = HASHTarget_POW;
@@ -1484,7 +1484,7 @@ void static BitcoinMiner()
                     {
                         return false;
                     }
-                    if ( IS_KOMODO_NOTARY && B.nTime > GetTime() )
+                    if ( IS_VAPORUM_NOTARY && B.nTime > GetTime() )
                     {
                         while ( GetTime() < B.nTime-2 )
                         {
@@ -1504,7 +1504,7 @@ void static BitcoinMiner()
                     }
                     if ( ASSETCHAINS_STAKED == 0 )
                     {
-                        if ( IS_KOMODO_NOTARY )
+                        if ( IS_VAPORUM_NOTARY )
                         {
                             int32_t r;
                             if ( (r= ((Mining_height + NOTARY_PUBKEY33[16]) % 64) / 8) > 0 )
@@ -1513,7 +1513,7 @@ void static BitcoinMiner()
                     }
                     else
                     {
-                        if ( KOMODO_MININGTHREADS == 0 ) // we are staking 
+                        if ( VAPORUM_MININGTHREADS == 0 ) // we are staking 
                         {
                             // Need to rebuild block if the found solution for PoS, meets POW target, otherwise it will be rejected. 
                             if ( ASSETCHAINS_STAKED < 100 && vaporum_newStakerActive(Mining_height,pblock->nTime) != 0 && h < hashTarget_POW )
@@ -1601,7 +1601,7 @@ void static BitcoinMiner()
                                 //    LogPrintf("%02x",((uint8_t *)&hash)[i]);
                                 //LogPrintf(" <- %s Block found %d\n",ASSETCHAINS_SYMBOL,Mining_height);
                                 //FOUND_BLOCK = 1;
-                                //KOMODO_MAYBEMINED = Mining_height;
+                                //VAPORUM_MAYBEMINED = Mining_height;
                                 break;
                             }
                         } catch (EhSolverCancelledException&) {

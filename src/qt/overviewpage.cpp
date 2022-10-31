@@ -14,7 +14,7 @@
 #include "transactionfilterproxy.h"
 #include "transactiontablemodel.h"
 #include "walletmodel.h"
-#include "util.h" // for KOMODO_ASSETCHAIN_MAXLEN
+#include "util.h" // for VAPORUM_ASSETCHAIN_MAXLEN
 
 #include <QAbstractItemDelegate>
 #include <QApplication>

@@ -159,7 +159,7 @@ TEST(TestEvents, vaporum_faststateinit_test)
     char symbol[] = "TST";
 
     chainName = assetchain("TST");
-    KOMODO_EXTERNAL_NOTARIES = 1;
+    VAPORUM_EXTERNAL_NOTARIES = 1;
 
     boost::filesystem::path temp = boost::filesystem::unique_path();
     boost::filesystem::create_directories(temp);
@@ -571,7 +571,7 @@ TEST(TestEvents, vaporum_faststateinit_test_kmd)
 
     char symbol[] = "KMD";
     chainName = assetchain();
-    KOMODO_EXTERNAL_NOTARIES = 0;
+    VAPORUM_EXTERNAL_NOTARIES = 0;
 
     boost::filesystem::path temp = boost::filesystem::unique_path();
     boost::filesystem::create_directories(temp);

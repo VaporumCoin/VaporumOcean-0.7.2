@@ -438,7 +438,7 @@ QString ZAddressTableModel::addRow(const QString &type, const QString &label, co
     else if(type == Receive)
     {
         // Generate a new address to associate with given label
-        if ( GetTime() < KOMODO_SAPLING_ACTIVATION )
+        if ( GetTime() < VAPORUM_SAPLING_ACTIVATION )
         {
             strAddress = EncodePaymentAddress(wallet->GenerateNewSproutZKey());
             strLabel = "z-sprout";

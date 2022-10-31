@@ -438,7 +438,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareZTransaction(WalletModelZTransa
                 {
                     return SendingBothSproutAndSapling;
                 }
-                if ( GetTime() > KOMODO_SAPLING_DEADLINE )
+                if ( GetTime() > VAPORUM_SAPLING_DEADLINE )
                 {
                     if ( fromSprout || toSprout )
                         return SproutUsageExpired;

@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef KOMODO_QT_CLIENTMODEL_H
-#define KOMODO_QT_CLIENTMODEL_H
+#ifndef VAPORUM_QT_CLIENTMODEL_H
+#define VAPORUM_QT_CLIENTMODEL_H
 
 #include <QObject>
 #include <QDateTime>
@@ -111,4 +111,4 @@ public Q_SLOTS:
     void updateBanlist();
 };
 
-#endif // KOMODO_QT_CLIENTMODEL_H
+#endif // VAPORUM_QT_CLIENTMODEL_H

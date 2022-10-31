@@ -32,7 +32,7 @@ struct vaporum_kv
     uint16_t valuesize; 
 };
 
-vaporum_kv *KOMODO_KV;
+vaporum_kv *VAPORUM_KV;
 
 /****
  * @brief build a private key from the public key and passphrase
@@ -120,7 +120,7 @@ int32_t vaporum_kvnumdays(uint32_t flags)
  */
 int32_t vaporum_kvduration(uint32_t flags)
 {
-    return(vaporum_kvnumdays(flags) * KOMODO_KVDURATION);
+    return(vaporum_kvnumdays(flags) * VAPORUM_KVDURATION);
 }
 
 /***
@@ -163,14 +163,14 @@ int32_t vaporum_kvsearch(uint256 *pubkeyp, int32_t current_height, uint32_t *fla
     memset(pubkeyp,0,sizeof(*pubkeyp));
     std::lock_guard<std::mutex> lock(kv_mutex);
     // look in hashtable for key
-    HASH_FIND(hh,KOMODO_KV,key,keylen,ptr);
+    HASH_FIND(hh,VAPORUM_KV,key,keylen,ptr);
     if ( ptr != nullptr )
     {
         int32_t duration = vaporum_kvduration(ptr->flags);
         if ( current_height > (ptr->height + duration) )
         {
             // entry has expired, remove it
-            HASH_DELETE(hh,KOMODO_KV,ptr);
+            HASH_DELETE(hh,VAPORUM_KV,ptr);
             if ( ptr->value != 0 )
                 free(ptr->value);
             if ( ptr->key != 0 )
@@ -277,7 +277,7 @@ void vaporum_kvupdate(uint8_t *opretbuf,int32_t opretlen,uint64_t value)
             std::lock_guard<std::mutex> lock(kv_mutex);
             vaporum_kv *ptr;
             bool newflag = false;
-            HASH_FIND(hh,KOMODO_KV,key,keylen,ptr);
+            HASH_FIND(hh,VAPORUM_KV,key,keylen,ptr);
             if ( ptr != 0 )
             {
                 // We are updating an existing entry
@@ -299,9 +299,9 @@ void vaporum_kvupdate(uint8_t *opretbuf,int32_t opretlen,uint64_t value)
                 ptr->keylen = keylen;
                 memcpy(ptr->key,key,keylen);
                 newflag = true;
-                HASH_ADD_KEYPTR(hh,KOMODO_KV,ptr->key,ptr->keylen,ptr);
+                HASH_ADD_KEYPTR(hh,VAPORUM_KV,ptr->key,ptr->keylen,ptr);
             }
-            if ( newflag || (ptr->flags & KOMODO_KVPROTECTED) == 0 ) // can we edit the value?
+            if ( newflag || (ptr->flags & VAPORUM_KVPROTECTED) == 0 ) // can we edit the value?
             {
                 if ( ptr->value != nullptr )
                 {
@@ -318,7 +318,7 @@ void vaporum_kvupdate(uint8_t *opretbuf,int32_t opretlen,uint64_t value)
             } 
             else 
                 LogPrintf("newflag.%d zero or protected %d\n",(uint16_t)newflag,
-                        (ptr->flags & KOMODO_KVPROTECTED));
+                        (ptr->flags & VAPORUM_KVPROTECTED));
             memcpy(&ptr->pubkey,&pubkey,sizeof(ptr->pubkey));
             ptr->height = height;
             ptr->flags = flags; // jl777 used to or in KVPROTECTED

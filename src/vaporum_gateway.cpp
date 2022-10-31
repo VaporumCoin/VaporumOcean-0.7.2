@@ -186,10 +186,10 @@ int32_t vaporum_check_deposit(int32_t height,const CBlock& block)
                     return(-1);
                 }
             }
-            else if ( block.nBits == KOMODO_MINDIFF_NBITS && total > 0 ) // to deal with fee stealing
+            else if ( block.nBits == VAPORUM_MINDIFF_NBITS && total > 0 ) // to deal with fee stealing
             {
                 LogPrintf("notary mined ht.%d with extra %.8f\n",height,dstr(total));
-                if ( height > KOMODO_NOTARIES_HEIGHT1 )
+                if ( height > VAPORUM_NOTARIES_HEIGHT1 )
                     return(-1);
             }
             if ( strangeout != 0 || notmatched != 0 )
