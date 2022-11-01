@@ -88,7 +88,7 @@ PlatformStyle::PlatformStyle(const QString &_name, bool _imagesOnButtons, bool _
         const int colorTextLightness = colorText.lightness();
         // QColor colorbase = QColor(0, 94, 94); // Vaporum Color
         // QColor colorbase = QColor(38, 69, 107);  // Vaporum Dark Blue
-        QColor colorbase = QColor(99, 122, 172);    // Vaporum Light Blue
+        QColor colorbase = QColor(29, 105, 138);    // Vaporum Light Blue
 
         /*if (abs(colorHighlightBg.lightness() - colorTextLightness) < abs(colorHighlightFg.lightness() - colorTextLightness))
             colorbase = colorHighlightBg;
