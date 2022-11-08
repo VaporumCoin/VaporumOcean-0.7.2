@@ -147,6 +147,11 @@ VaporumOceanGUI::VaporumOceanGUI(const PlatformStyle *_platformStyle, const Netw
     QApplication::setWindowIcon(networkStyle->getTrayAndWindowIcon());
     setWindowIcon(networkStyle->getTrayAndWindowIcon());
     setWindowTitle(windowTitle);
+    QFontDatabase::addApplicationFont(":/fonts/notosans-regular");
+    QFile styleFile(":/themes/default");
+    styleFile.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(styleFile.readAll());
+    this->setStyleSheet(styleSheet);
 
 #if defined(Q_OS_MAC) && QT_VERSION < 0x050000
     // This property is not implemented in Qt 5. Setting it has no effect.
