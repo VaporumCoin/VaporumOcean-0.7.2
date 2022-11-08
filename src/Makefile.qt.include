@@ -316,6 +316,8 @@ RES_ICONS = \
   qt/res/icons/tx_mined.png \
   qt/res/icons/warning.png \
   qt/res/icons/verify.png
+  qt/res/themes/default.qss \
+  qt/res/fonts/NotoSans-Regular.ttf
 
 VAPORUM_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
