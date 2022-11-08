@@ -18,11 +18,11 @@ Use the default `static` branch and following scripts to build:
 
 ```shell
 #The following packages are needed:
-sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python bison zlib1g-dev wget libcurl4-gnutls-dev bsdmainutils automake curl
+sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python3 bison zlib1g-dev wget libcurl4-gnutls-dev bsdmainutils automake curl
 ```
 
 ```shell
-git clone https://github.com/VaporumCoin/VaporumOcean-Beta --branch static --single-branch
+git clone https://github.com/VaporumCoin/VaporumOcean-0.7.2.git
 cd VaporumOcean-Beta
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
@@ -59,7 +59,7 @@ brew install protobuf
 brew install coreutils
 brew install wget
 # Clone the Vaporum repo
-git clone https://github.com/VaporumCoin/VaporumOcean-Beta --branch static --single-branch
+git clone https://github.com/VaporumCoin/VaporumOcean-0.7.2.git
 # Change master branch to other branch you wish to compile
 cd VaporumOcean-Beta
 ./zcutil/fetch-params.sh
@@ -71,7 +71,7 @@ cd VaporumOcean-Beta
 #### Windows
 Use a debian cross-compilation setup with mingw for windows and run:
 ```shell
-sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python python-zmq zlib1g-dev wget libcurl4-gnutls-dev bsdmainutils automake curl cmake mingw-w64
+sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoconf libtool ncurses-dev unzip git python3 python3-zmq zlib1g-dev wget libcurl4-gnutls-dev bsdmainutils automake curl cmake mingw-w64
 curl https://sh.rustup.rs -sSf | sh
 source $HOME/.cargo/env
 rustup target add x86_64-pc-windows-gnu
@@ -84,7 +84,7 @@ sudo update-alternatives --config x86_64-w64-mingw32-g++
 sudo bash -c "echo 0 > /proc/sys/fs/binfmt_misc/status"
 #temp build patch
 
-git clone https://github.com/VaporumCoin/VaporumOcean-Beta --branch static --single-branch
+git clone https://github.com/VaporumCoin/VaporumOcean-0.7.2.git
 cd VaporumOcean-Beta
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
