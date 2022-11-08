@@ -23,7 +23,7 @@ sudo apt-get install build-essential pkg-config libc6-dev m4 g++-multilib autoco
 
 ```shell
 git clone https://github.com/VaporumCoin/VaporumOcean-0.7.2.git
-cd VaporumOcean-Beta
+cd VaporumOcean-0.7.2
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
 ./zcutil/build.sh -j8
@@ -61,7 +61,7 @@ brew install wget
 # Clone the Vaporum repo
 git clone https://github.com/VaporumCoin/VaporumOcean-0.7.2.git
 # Change master branch to other branch you wish to compile
-cd VaporumOcean-Beta
+cd VaporumOcean-0.7.2
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
 ./zcutil/build-mac.sh -j8
@@ -85,7 +85,7 @@ sudo bash -c "echo 0 > /proc/sys/fs/binfmt_misc/status"
 #temp build patch
 
 git clone https://github.com/VaporumCoin/VaporumOcean-0.7.2.git
-cd VaporumOcean-Beta
+cd VaporumOcean-0.7.2
 ./zcutil/fetch-params.sh
 # -j8 = using 8 threads for the compilation - replace 8 with number of threads you want to use
 ./zcutil/build-win.sh -j8
