@@ -95,16 +95,4 @@
         <file alias="spinner-034">res/movies/spinner-034.png</file>
         <file alias="spinner-035">res/movies/spinner-035.png</file>
     </qresource>
-    <qresource prefix="/themes">
-        <file alias="default">res/themes/default.qss</file>
-    </qresource>
-    <qresource prefix="/fonts">
-        <file alias="notosans-regular">res/fonts/NotoSans-Regular.ttf</file>
-    </qresource>
-    <qresource prefix="/controls">
-        <file alias="caret-down">res/images/controls/caret-down.png</file>
-        <file alias="caret-up">res/images/controls/caret-up.png</file>
-        <file alias="scroll-down">res/images/controls/scroll-down.png</file>
-        <file alias="scroll-up">res/images/controls/scroll-up.png</file>
-    </qresource>
 </RCC>
