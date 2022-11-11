@@ -30,6 +30,7 @@ public:
 
     enum OptionID {
         StartAtStartup,         // bool
+		StartStakingAtStartup,  // QString
         HideTrayIcon,           // bool
         MinimizeToTray,         // bool
         MapPortUPnP,            // bool

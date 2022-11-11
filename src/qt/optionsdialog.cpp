@@ -75,6 +75,9 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
 
     ui->vaporumAtStartup->setToolTip(ui->vaporumAtStartup->toolTip().arg(tr(PACKAGE_NAME)));
     ui->vaporumAtStartup->setText(ui->vaporumAtStartup->text().arg(tr(PACKAGE_NAME)));
+	
+	ui->vaporumAtStartStaking->setToolTip(ui->vaporumAtStartStaking->toolTip().arg(tr(PACKAGE_NAME)));
+    ui->vaporumAtStartStaking->setText(ui->vaporumAtStartStaking->text().arg(tr(PACKAGE_NAME)));
 
     ui->openVaporumConfButton->setToolTip(ui->openVaporumConfButton->toolTip().arg(tr(PACKAGE_NAME)));
 
@@ -173,6 +176,7 @@ void OptionsDialog::setMapper()
 {
     /* Main */
     mapper->addMapping(ui->vaporumAtStartup, OptionsModel::StartAtStartup);
+	mapper->addMapping(ui->vaporumAtStartStaking, OptionsModel::StartAtStartStaking);
     mapper->addMapping(ui->threadsScriptVerif, OptionsModel::ThreadsScriptVerif);
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
 

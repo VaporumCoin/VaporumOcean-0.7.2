@@ -294,6 +294,9 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case StartAtStartup:
             successful = GUIUtil::SetStartOnSystemStartup(value.toBool());
             break;
+		case StartStakingAtStartup:
+            successful = GUIUtil::SetStartStakingOnStartup(value.toBool());
+            break;
         case HideTrayIcon:
             fHideTrayIcon = value.toBool();
             settings.setValue("fHideTrayIcon", fHideTrayIcon);
