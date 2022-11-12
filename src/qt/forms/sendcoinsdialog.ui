@@ -13,9 +13,6 @@
   <property name="windowTitle">
    <string>Send Coins</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color: rgb(64, 65, 66);</string>
-  </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0">
    <property name="bottomMargin">
     <number>8</number>

@@ -13,12 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="autoFillBackground">
-   <bool>false</bool>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">background-color: rgb(64, 65, 66);</string>
-  </property>
   <layout class="QVBoxLayout" name="topLayout">
    <item>
     <widget class="QLabel" name="labelAlerts">
