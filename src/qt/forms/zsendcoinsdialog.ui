@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Z-Send Coins</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(64, 65, 66);</string>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,0">
    <property name="bottomMargin">
     <number>8</number>
@@ -83,12 +86,39 @@
             <property name="palette">
              <palette>
               <active>
+               <colorrole role="Button">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
+                 </color>
+                </brush>
+               </colorrole>
                <colorrole role="Text">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
                   <red>0</red>
                   <green>85</green>
                   <blue>127</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Base">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Window">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -103,12 +133,39 @@
                </colorrole>
               </active>
               <inactive>
+               <colorrole role="Button">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
+                 </color>
+                </brush>
+               </colorrole>
                <colorrole role="Text">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
                   <red>0</red>
                   <green>0</green>
                   <blue>0</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Base">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Window">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
                  </color>
                 </brush>
                </colorrole>
@@ -123,12 +180,39 @@
                </colorrole>
               </inactive>
               <disabled>
+               <colorrole role="Button">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
+                 </color>
+                </brush>
+               </colorrole>
                <colorrole role="Text">
                 <brush brushstyle="SolidPattern">
                  <color alpha="255">
                   <red>120</red>
                   <green>120</green>
                   <blue>120</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Base">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
+                 </color>
+                </brush>
+               </colorrole>
+               <colorrole role="Window">
+                <brush brushstyle="SolidPattern">
+                 <color alpha="255">
+                  <red>64</red>
+                  <green>65</green>
+                  <blue>66</blue>
                  </color>
                 </brush>
                </colorrole>
