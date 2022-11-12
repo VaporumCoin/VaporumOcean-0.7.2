@@ -117,6 +117,8 @@ txindex=1
 rpcworkqueue=256
 addnode=167.172.130.118
 addnode=157.230.90.81
+addnode=134.209.73.222
+addnode=159.223.122.166
 ```
 
 Bash one-liner for Linux to create `VPRM.conf` with random RPC password:
