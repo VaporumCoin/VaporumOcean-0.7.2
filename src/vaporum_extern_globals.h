@@ -23,7 +23,7 @@
 
 extern bool IS_VAPORUM_NOTARY;
 extern bool IS_VAPORUM_DEALERNODE;
-extern char KMDUSERPASS[8192+512+1];
+extern char VPRMUSERPASS[8192+512+1];
 extern char BTCUSERPASS[8192]; 
 extern char ASSETCHAINS_USERPASS[4096];
 extern uint8_t NOTARY_PUBKEY33[33];
@@ -32,7 +32,7 @@ extern uint8_t ASSETCHAINS_OVERRIDE_PUBKEYHASH[20];
 extern uint8_t ASSETCHAINS_PUBLIC;
 extern uint8_t ASSETCHAINS_PRIVATE;
 extern uint8_t ASSETCHAINS_TXPOW;
-extern uint16_t KMD_PORT;
+extern uint16_t VPRM_PORT;
 extern uint16_t BITCOIND_RPCPORT;
 extern uint16_t DEST_PORT;
 extern uint16_t ASSETCHAINS_P2PPORT;

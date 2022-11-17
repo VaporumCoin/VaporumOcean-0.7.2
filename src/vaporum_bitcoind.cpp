@@ -371,8 +371,8 @@ int32_t notarizedtxid_height(char *dest,char *txidstr,int32_t *kmdnotarized_heig
     *kmdnotarized_heightp = 0;
     if ( strcmp(dest,"KMD") == 0 )
     {
-        port = KMD_PORT;
-        userpass = KMDUSERPASS;
+        port = VPRM_PORT;
+        userpass = VPRMUSERPASS;
     }
     else if ( strcmp(dest,"BTC") == 0 ) // this is no longer strictly BTC; depends on -notary= path
     {
@@ -475,12 +475,12 @@ int32_t vaporum_verifynotarization(char *symbol,char *dest,int32_t height,int32_
         return(0);
     if ( strcmp(dest,"KMD") == 0 )
     {
-        if ( KMDUSERPASS[0] != 0 )
+        if ( VPRMUSERPASS[0] != 0 )
         {
             if ( !chainName.isKMD() )
             {
-                jsonstr = vaporum_issuemethod(KMDUSERPASS,(char *)"getrawtransaction",params,KMD_PORT);
-                //LogPrintf("userpass.(%s) got (%s)\n",KMDUSERPASS,jsonstr);
+                jsonstr = vaporum_issuemethod(VPRMUSERPASS,(char *)"getrawtransaction",params,VPRM_PORT);
+                //LogPrintf("userpass.(%s) got (%s)\n",VPRMUSERPASS,jsonstr);
             }
         }//else jsonstr = _dex_getrawtransaction();
         else return(0); // need universal way to issue DEX* API, since notaries mine most blocks, this ok

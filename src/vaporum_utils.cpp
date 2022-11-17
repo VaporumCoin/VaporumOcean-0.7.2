@@ -481,7 +481,7 @@ void vaporum_statefname(char *fname, const char *symbol, const char *str)
 void vaporum_configfile(const char *symbol,uint16_t rpcport)
 {
     static char myusername[512],mypassword[8192];
-    FILE *fp; uint16_t kmdport; uint8_t buf2[33]; char fname[512],buf[128],username[512],password[8192]; uint32_t crc,r,r2,i;
+    FILE *fp; uint16_t vprmport; uint8_t buf2[33]; char fname[512],buf[128],username[512],password[8192]; uint32_t crc,r,r2,i;
     if ( symbol != 0 && rpcport != 0 )
     {
         r = (uint32_t)time(NULL);
@@ -542,9 +542,9 @@ void vaporum_configfile(const char *symbol,uint16_t rpcport)
 #endif
     if ( (fp= fopen(fname,"rb")) != 0 )
     {
-        if ( (kmdport= _vaporum_userpass(username,password,fp)) != 0 )
-            KMD_PORT = kmdport;
-        sprintf(KMDUSERPASS,"%s:%s",username,password);
+        if ( (vprmport= _vaporum_userpass(username,password,fp)) != 0 )
+            VPRM_PORT = vprmport;
+        sprintf(VPRMUSERPASS,"%s:%s",username,password);
         fclose(fp);
     }
 }
@@ -980,7 +980,7 @@ void get_userpass_and_port(const boost::filesystem::path& path, const std::strin
 
 /****
  * @brief set ports and usernames/passwords from command line and/or config files
- * @note modifies ASSETCHAINS_P2PPORT, ASSETCHAINS_RPCPORT, KMDUSERPASS, BTCUSERPASS, DESTPORT
+ * @note modifies ASSETCHAINS_P2PPORT, ASSETCHAINS_RPCPORT, VPRMUSERPASS, BTCUSERPASS, DESTPORT
  * @note IS_VAPORUM_NOTARY should already be set
  * @param ltc_config_filename configuration file for ltc (via -notary command line parameter)
  */
@@ -999,7 +999,7 @@ void set_kmd_user_password_port(const std::string& ltc_config_filename)
     std::string userpass;
     get_userpass_and_port(datadir_path, filename, userpass, ignore);
     if (!userpass.empty())
-        strncpy(KMDUSERPASS, userpass.c_str(), 8705);
+        strncpy(VPRMUSERPASS, userpass.c_str(), 8705);
     if (IS_VAPORUM_NOTARY)
     {
         auto approot_path = GetAppDir();  // go to app root dir

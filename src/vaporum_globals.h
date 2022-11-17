@@ -84,9 +84,9 @@ extern uint64_t ASSETCHAINS_COMMISSION;
 extern uint64_t ASSETCHAINS_SUPPLY;
 extern uint64_t ASSETCHAINS_FOUNDERS_REWARD;
 extern uint32_t VAPORUM_INITDONE;
-extern char KMDUSERPASS[8192+512+1];
+extern char VPRMUSERPASS[8192+512+1];
 extern char BTCUSERPASS[8192];
-extern uint16_t KMD_PORT;
+extern uint16_t VPRM_PORT;
 extern uint16_t BITCOIND_RPCPORT;
 extern uint16_t DEST_PORT;
 
