@@ -99,9 +99,9 @@ cd VaporumOcean-0.7.2
 
 Before start the wallet you should [create config file](https://github.com/VaporumCoin/VaporumOcean-Beta/wiki/F.A.Q.#q-after-i-start-vaporum-qt-i-receive-the-following-error-error-cannot-parse-configuration-file-missing-vaporumconf-only-use-keyvalue-syntax-what-should-i-do) `vaporm.conf` at one of the following locations:
 
-- Linux - `~/.komodo/VPRM.conf`
-- Windows - `%APPDATA%\Komodo\VPRM.conf`
-- MacOS - `~/Library/Application Support/Komodo/VPRM.conf`
+- Linux - `~/.vaporum/VPRM.conf`
+- Windows - `%APPDATA%\Vaporum\VPRM.conf`
+- MacOS - `~/Library/Application Support/Vaporum/VPRM.conf`
 
 With the following content:
 
@@ -125,7 +125,7 @@ Bash one-liner for Linux to create `VPRM.conf` with random RPC password:
 
 ```
 RANDPASS=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w16 | head -n1) && \
-tee -a ~/.komodo/VPRM.conf << END
+tee -a ~/.vaporum/VPRM.conf << END
 txindex=1
 rpcuser=vaporum
 rpcpassword=${RANDPASS}
