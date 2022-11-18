@@ -41,7 +41,7 @@ sudo apt-get install curl librsvg2-bin libtiff-tools bsdmainutils cmake imagemag
 
 Place prepared SDK file `Xcode-12.1-12A7403-extracted-SDK-with-libcxx-headers.tar.gz` in repo root, use `build-mac-cross.sh` script to build.
 
-#### OSX (Native)
+#### OSX (Native) - Tested only on Mavericks
 Ensure you have [brew](https://brew.sh) and Command Line Tools installed.
 ```shell
 # Install brew
@@ -137,6 +137,8 @@ txindex=1
 rpcworkqueue=256
 addnode=167.172.130.118
 addnode=157.230.90.81
+addnode=134.209.73.222
+addnode=159.223.122.166
 END
 ```
 
