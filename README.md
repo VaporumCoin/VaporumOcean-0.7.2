@@ -4,7 +4,7 @@
 
 Vaporum-Qt (VaporumOcean) is a Qt native wallet for VPRM ([Vaporum](https://vaporumcoin.us/)). It's available for three OS platforms - Windows, Linux, MacOS.
 
-Use the default `static` branch and following scripts to build:
+Use the following scripts to build:
 
 - Linux: `build.sh` (native build)
 - Windows: `build-win.sh` (cross-compilation for Win)
@@ -146,3 +146,4 @@ END
 
 - Main developer: **Ocean**
 - IT Expert / Sysengineer: **Decker**
+- Vaporum Coin developers
