@@ -1,4 +1,4 @@
-# VaporumOcean (Vaporum-qt)#
+# VaporumOcean (Vaporum-qt)
 
 ![](./doc/images/Vaporum-logo.png)
 
